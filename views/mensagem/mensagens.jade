@@ -1,0 +1,501 @@
+extends ../layout
+
+block content	
+	main.mensagens
+		section.fotoTopo.row
+		.divMensagens
+			.faixa
+				h1 Mensagens
+			.container.mensagens
+				.tabela
+					.botoesTabela.col-md-4.col-xs-12
+						a(data-toggle='modal', data-target='#novaMensagemModal')
+							.celulaVerde.col-xs-12
+								p Nova mensagem
+						a(href='/mensagens')
+							.celulaVerde.col-xs-12
+								p Caixa de entrada
+						a(href='/mensagem/enviadas')
+							.celulaVerde.col-xs-12
+								p Enviadas
+					.blocoMensagens.col-md-8
+						h2 Caixa de Entrada
+						.linha.primeiraLinha
+							.coluna.col-xs-3.enviadaspara
+								.celula
+									p De
+							.coluna.col-xs-3.enviadasassunto
+								.celula
+									p Assunto
+							.coluna.col-xs-2.enviadasdata
+								.celula
+									p Recebido em
+						each lista, i in listaMensagens
+							if (lista.status_mensagem != 1)
+								if (user.tipoConta == "administrador")
+									if (lista.destinatario == listaUsuario._id || lista.destinatario == user.email)
+										.linha
+											.coluna.col-xs-3.enviadaspara
+												.celula
+													if (lista.repeticao != "Todos")
+														each remetente, i in listaUsuarios
+															if (remetente._id == lista.remetente)
+																- var remetente = string(remetente.nome).left(15).toString();
+																if (remetente.length > 14) 
+																	p #{remetente}...
+																else 
+																	p #{remetente}
+													else
+														each remetente, i in listaUsuarios
+															if (remetente._id == lista.remetente)
+																p #{remetente.nome}
+											.coluna.col-xs-3.enviadasassunto
+												.celula
+													- var assunto = string(lista.assunto).left(15).toString();
+													if (assunto.length > 14) 
+														p #{assunto}...
+													else 
+														p #{assunto}
+
+											.coluna.col-xs-2.enviadasdata
+												.celula
+													p #{moment(lista.dataAtual).format('DD/MM')}
+											a(href='#', data-toggle='modal', data-target='##{lista._id}')
+												.coluna.col-xs-1.enviadasver
+													.celula
+														p Ver
+											a(href='#', data-toggle='modal', data-target='#responder#{lista._id}')
+												.coluna.col-xs-2.enviadasresponder
+													.celula
+														p Responder
+											a(href='#', data-toggle='modal', data-target='#excluir#{lista._id}' style="color: red;")
+												.coluna.col-xs-1
+													i.fa.fa-times
+											//- Fim bloco mensagens
+												//- Modal Ler Mensagem
+											//- EXCLUIR
+											.modal.fade(role='dialog', id='excluir#{lista._id}')
+												.modal-dialog
+													//- Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title Deseja excluir esta mensagem?
+														.modal-body
+															form(action='/excluirMSG/#{lista._id}' method='POST' enctype='multipart/form-data')
+																.form-group																
+																	input.form-control(type='hidden', name='status_mensagem', value='1')
+																each remetente, i in listaUsuarios
+																	if (remetente._id == lista.remetente)
+																		- var remetente = remetente.nome;
+																		textarea#mensagem.form-control(cols='30', rows='10', name='mensagem', disabled)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+																br
+																.modal-footer
+																	button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+																	button.btn.botaoEnviar.pull-right.btn-danger Deletar
+											.modal.fade(role='dialog', id='#{lista._id}')
+												.modal-dialog
+													//- Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title #{lista.assunto}
+														.modal-body
+															each remetente, i in listaUsuarios
+																if (remetente._id == lista.remetente)
+																	- var remetente = remetente.nome;
+																	textarea#mensagem.form-control(cols='30', rows='10', name='mensagem', disabled)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+															br
+															if (lista.anexo != null)
+																a(href='/file/#{lista.anexo}' target='_blank')
+																	img(src='/file/#{lista.anexo}' style='max-width: 550px; height: auto;' title="Arquivo pdf")
+															h5
+																| Enviada por 
+																each destinatario, i in listaUsuarios
+																	if (destinatario._id == lista.remetente)
+																		span #{destinatario.nome}
+																																	
+											.modal.fade(role='dialog' id='responder#{lista._id}')
+												.modal-dialog
+													// Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title Responder mensagem
+														.modal-body
+															form(action='/enviarMensagem' method='post' enctype='multipart/form-data')
+																.form-group
+																	input#remetente.form-control(type='hidden', name='remetente', value='#{user._id}')
+																.form-group
+																	input#dataAtual.form-control(type='hidden', name='dataAtual', value='#{dataAtual}')
+																.form-group
+																	each lista, i in listaUsuarios
+																		if (lista.email != user.email)
+																			input(type='hidden' name='emails' value='#{lista.email}')
+																.form-group
+																	each lista, i in listaUsuarios
+																		if (lista._id != user._id)
+																			input(type='hidden' name='destinatario_id' value='#{lista._id}')
+																	label(for='para') Para:
+																	select#para.form-control(name='destinatario')
+																		if (user.tipoConta == "administrador")
+																			each remetente, i in listaUsuarios
+																				if (remetente._id == lista.remetente)
+																					- var remetente = remetente.email;
+																					option(value='#{remetente}') #{remetente}
+																		else
+																			each remetente, i in listaUsuarios
+																				if (remetente._id == lista.remetente)
+																					- var remetente = remetente.email;
+																					option(value='#{remetente}') #{remetente}
+																			
+																.form-group
+																	label(for='assunto') Assunto
+																	input#assunto.form-control(type='text', name='assunto' value="Fwd: #{lista.assunto}")
+																.form-group
+																	input#anexo.form-control(type='file', name='anexo' value="Fwd: #{lista.anexo}")
+																.form-group
+																	label(for='mensagem') Mensagem
+																	each remetente, i in listaUsuarios
+																		if (remetente._id == lista.remetente)
+																			- var remetente = remetente.nome;
+																			textarea#mensagem.form-control(cols='30', rows='10', name='mensagem')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+																.modal-footer
+																	button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+																	button.btn.botaoEnviar.pull-right Enviar
+													//- Fim Modal Ler Mensagem
+											//- Fim tabela
+								else
+									if (lista.destinatario == user._id || lista.destinatario == user.email)
+										.linha
+											.coluna.col-xs-3.enviadaspara
+												.celula
+													//- if (lista.destinatario != "Todos")
+													//- 	each remetente, i in listaUsuarios
+													//- 		if (remetente._id == lista.remetente)
+													//- 			- var remetente = string(remetente.nome).left(15).toString();
+													//- 			if (remetente.length > 14) 
+													//- 				p #{remetente}...
+													//- 			else 
+													//- 				p #{remetente}
+													//- else
+													each destinatario, i in listaUsuarios
+														if (destinatario._id == lista.remetente)
+															p #{destinatario.nome}
+											.coluna.col-xs-3.enviadasassunto
+												.celula
+													- var assunto = string(lista.assunto).left(15).toString();
+													if (assunto.length > 14) 
+														p #{assunto}...
+													else 
+														p #{assunto}
+
+											.coluna.col-xs-2.enviadasdata
+												.celula
+													p #{moment(lista.dataAtual).format('DD/MM')}
+											a(href='#', data-toggle='modal', data-target='##{lista._id}')
+												.coluna.col-xs-1.enviadasver
+													.celula
+														p Ver
+											a(href='#', data-toggle='modal', data-target='#responder#{lista._id}')
+												.coluna.col-xs-2.enviadasresponder
+													.celula
+														p Responder
+											a(href='#', data-toggle='modal', data-target='#excluir#{lista._id}' style="color: red;")
+												.coluna.col-xs-1
+													i.fa.fa-times
+											//- Fim bloco mensagens
+												//- Modal Ler Mensagem
+											//- EXCLUIR
+											.modal.fade(role='dialog', id='excluir#{lista._id}')
+												.modal-dialog
+													//- Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title Deseja excluir esta mensagem?
+														.modal-body
+															form(action='/excluirMSG/#{lista._id}' method='POST' enctype='multipart/form-data')
+																.form-group 															
+																	input.form-control(type='hidden', name='status_mensagem', value='1')
+																each remetente, i in listaUsuarios
+																	if (remetente._id == lista.remetente)
+																		- var remetente = remetente.nome;
+																		textarea#mensagem.form-control(cols='30', rows='10', name='mensagem', disabled)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+																br
+																.modal-footer
+																	button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+																	button.btn.botaoEnviar.pull-right.btn-danger Deletar
+											//- Fim bloco mensagens
+												//- Modal Ler Mensagem
+											.modal.fade(role='dialog', id='#{lista._id}')
+												.modal-dialog
+													//- Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title #{lista.assunto}
+														.modal-body
+															each remetente, i in listaUsuarios
+																if (remetente._id == lista.remetente)
+																	- var remetente = remetente.nome;
+																	textarea#mensagem.form-control(cols='30', rows='10', name='mensagem', disabled)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+															br
+															if (lista.anexo != null)
+																a(href='/file/#{lista.anexo}' target='_blank')
+																	img(src='/file/#{lista.anexo}' style='max-width: 550px; height: auto;' title="Arquivo pdf")
+															br
+															h5
+																| Enviada por 
+																each destinatario, i in listaUsuarios
+																	if (destinatario._id == lista.remetente)
+																		span #{destinatario.nome}
+														.modal-footer
+															button.btn.btn-default.botaoFechar(type='button', data-dismiss='modal') Fechar
+											.modal.fade(role='dialog' id='responder#{lista._id}')
+												.modal-dialog
+													// Modal content
+													.modal-content
+														.modal-header
+															button.close(type='button', data-dismiss='modal') ×
+															h4.modal-title Responder mensagem
+														.modal-body
+															form(action='/enviarMensagem' method='post' enctype='multipart/form-data')
+																.form-group
+																	input#remetente.form-control(type='hidden', name='remetente', value='#{user._id}')
+																.form-group
+																	input#dataAtual.form-control(type='hidden', name='dataAtual', value='#{dataAtual}')
+																.form-group
+																	each lista, i in listaUsuarios
+																		if (lista.email != user.email)
+																			input(type='hidden' name='emails' value='#{lista.email}')
+																.form-group
+																	each lista, i in listaUsuarios
+																		if (lista._id != user._id)
+																			input(type='hidden' name='destinatario_id' value='#{lista._id}')
+																	//- label(for='para') Para:
+																	if (user.tipoConta == "administrador")
+																		each remetente, i in listaUsuarios
+																			if (remetente._id == lista.remetente)
+																				- var remetente = remetente.email;
+																				input(type="hidden" value='#{remetente}' name='destinatario')
+																	else
+																		each remetente, i in listaUsuarios
+																			if (remetente._id == lista.remetente)
+																				- var remetente = remetente.email;
+																				input(type="hidden" value='#{remetente}' name='destinatario')
+																			
+																.form-group
+																	label(for='assunto') Assunto
+																	input#assunto.form-control(type='text', name='assunto' value="Fwd: #{lista.assunto}")
+																.form-group
+																	input#anexo.form-control(type='file', name='anexo' value="Fwd: #{lista.anexo}")
+																.form-group
+																	label(for='mensagem') Mensagem
+																	each remetente, i in listaUsuarios
+																		if (remetente._id == lista.remetente)
+																			- var remetente = remetente.nome;
+																			textarea#mensagem.form-control(cols='30', rows='10', name='mensagem')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+																.modal-footer
+																	button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+																	button.btn.botaoEnviar.pull-right Enviar
+												//- Fim Modal Ler Mensagem
+										//- Fim tabela
+							//- if (user.tipoConta != "administrador")
+							//- 	if (lista.destinatario == listaUsuario.email || lista.destinatario == user.email)
+							//- 		.linha
+							//- 			.coluna.col-xs-3
+							//- 				.celula
+							//- 					//- if (lista.destinatario != "Todos")
+							//- 					//- 	each remetente, i in listaUsuarios
+							//- 					//- 		if (remetente._id == lista.remetente)
+							//- 					//- 			- var remetente = string(remetente.nome).left(15).toString();
+							//- 					//- 			if (remetente.length > 14) 
+							//- 					//- 				p #{destinatario}...
+							//- 					//- 			else 
+							//- 					//- 				p #{remetente}
+							//- 					//- else
+							//- 					each destinatario, i in listaUsuarios
+							//- 						if (destinatario._id == lista.remetente)
+							//- 							p #{destinatario.nome}
+							//- 			.coluna.col-xs-3
+							//- 				.celula
+							//- 					- var assunto = string(lista.assunto).left(15).toString();
+							//- 					if (assunto.length > 14) 
+							//- 						p #{assunto}...
+							//- 					else 
+							//- 						p #{assunto}
+
+							//- 			.coluna.col-xs-2
+							//- 				.celula
+							//- 					p #{moment(lista.dataAtual).format('DD/MM')}
+							//- 			a(href='#', data-toggle='modal', data-target='##{lista._id}')
+							//- 				.coluna.col-xs-1
+							//- 					.celula
+							//- 						p Ver
+							//- 			a(href='#', data-toggle='modal', data-target='#responder#{lista._id}')
+							//- 				.coluna.col-xs-2
+							//- 					.celula
+							//- 						p Responder
+							//- 			a(href='#', data-toggle='modal', data-target='#excluir#{lista._id}' style="color: red;")
+							//- 				.coluna.col-xs-1
+							//- 					i.fa.fa-times
+							//- 			//- Fim bloco mensagens
+							//- 				//- Modal Ler Mensagem
+							//- 			//- EXCLUIR
+							//- 			.modal.fade(role='dialog', id='excluir#{lista._id}')
+							//- 				.modal-dialog
+							//- 					//- Modal content
+							//- 					.modal-content
+							//- 						.modal-header
+							//- 							button.close(type='button', data-dismiss='modal') ×
+							//- 							h4.modal-title Deseja excluir esta mensagem?
+							//- 						.modal-body
+							//- 							form(action='/excluir/#{lista._id}' method='post' enctype='multipart/form-data')
+							//- 								.form-group
+							//- 									input.form-control(type='hidden', name='status', value='1')
+							//- 								p Depois de deletado não terá como recuperar essa mensagem!
+							//- 								.modal-footer
+							//- 									button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+							//- 									button.btn.botaoEnviar.pull-right.btn-danger Deletar
+							//- 			//- Fim bloco mensagens
+							//- 				//- Modal Ler Mensagem
+							//- 			.modal.fade(role='dialog', id='#{lista._id}')
+							//- 				.modal-dialog
+							//- 					//- Modal content
+							//- 					.modal-content
+							//- 						.modal-header
+							//- 							button.close(type='button', data-dismiss='modal') ×
+							//- 							h4.modal-title #{lista.assunto}
+							//- 						.modal-body
+							//- 							each remetente, i in listaUsuarios
+							//- 								if (remetente._id == lista.remetente)
+							//- 									- var remetente = remetente.nome;
+							//- 									textarea#mensagem.form-control(cols='30', rows='10', name='mensagem', disabled)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+							//- 							br
+							//- 							if (lista.anexo != null)
+							//- 								a(href='/file/#{lista.anexo}' target='_blank')
+							//- 									img(src='/file/#{lista.anexo}' style='max-width: 550px; height: auto;' title="Arquivo pdf")
+							//- 							br
+							//- 							h5
+							//- 								| Enviada por 
+							//- 								each destinatario, i in listaUsuarios
+							//- 									if (destinatario._id == lista.remetente)
+							//- 										span #{destinatario.nome}
+							//- 						.modal-footer
+							//- 							button.btn.btn-default.botaoFechar(type='button', data-dismiss='modal') Fechar
+							//- 					//- Fim Modal Ler Mensagem
+							//- 			.modal.fade(role='dialog' id='responder#{lista._id}')
+							//- 				.modal-dialog
+							//- 					// Modal content
+							//- 					.modal-content
+							//- 						.modal-header
+							//- 							button.close(type='button', data-dismiss='modal') ×
+							//- 							h4.modal-title Responder mensagem
+							//- 						.modal-body
+							//- 							form(action='/enviarMensagem' method='post' enctype='multipart/form-data')
+							//- 								.form-group
+							//- 									input#remetente.form-control(type='hidden', name='remetente', value='#{user._id}')
+							//- 								.form-group
+							//- 									input#dataAtual.form-control(type='hidden', name='dataAtual', value='#{dataAtual}')
+							//- 								.form-group
+							//- 									each lista, i in listaUsuarios
+							//- 										if (lista.email != user.email)
+							//- 											input(type='hidden' name='emails' value='#{lista.email}')
+							//- 								.form-group
+							//- 									each lista, i in listaUsuarios
+							//- 										if (lista._id != user._id)
+							//- 											input(type='hidden' name='destinatario_id' value='#{lista._id}')
+							//- 									if (user.tipoConta == "administrador")
+							//- 										each remetente, i in listaUsuarios
+							//- 											if (remetente._id == lista.remetente)
+							//- 												- var remetente = remetente.email;
+							//- 												input(type="hidden" value='#{remetente}' name='destinatario')
+							//- 									else
+							//- 										each remetente, i in listaUsuarios
+							//- 											if (remetente._id == lista.remetente)
+							//- 												- var remetente = remetente.email;
+							//- 												input(type="hidden" value='#{remetente}' name='destinatario')
+																		
+							//- 								.form-group
+							//- 									label(for='assunto') Assunto
+							//- 									input#assunto.form-control(type='text', name='assunto' value="Fwd: #{lista.assunto}")
+							//- 								.form-group
+							//- 									input#anexo.form-control(type='file', name='anexo' value="Fwd: #{lista.anexo}")
+							//- 								.form-group
+							//- 									label(for='mensagem') Mensagem
+							//- 									each remetente, i in listaUsuarios
+							//- 										if (remetente._id == lista.remetente)
+							//- 											- var remetente = remetente.nome;
+							//- 											textarea#mensagem.form-control(cols='30', rows='10', name='mensagem')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -------------------                                                                                                                                                                                                     Enviado por: #{remetente}                                                                                                                                                                                                          Mensagem: #{lista.mensagem}
+							//- 								.modal-footer
+							//- 									button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+							//- 									button.btn.botaoEnviar.pull-right Enviar
+										//- Fim tabela
+		.row.deuRuimColor
+			.container
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+	//- Modal Nova Mensagem
+	#novaMensagemModal.modal.fade(role='dialog')
+		.modal-dialog
+			// Modal content
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal') ×
+					h4.modal-title Nova mensagem
+				.modal-body
+					form(action='/enviarMensagem' method='post' enctype='multipart/form-data')
+						.form-group
+							input#remetente.form-control(type='hidden', name='remetente', value='#{user._id}')
+						.form-group
+							input#dataAtual.form-control(type='hidden', name='dataAtual', value='#{dataAtual}')
+						.form-group
+							each lista, i in listaUsuarios
+								if (lista.email != user.email)
+									input(type='hidden' name='emails' value='#{lista.email}')
+						.form-group
+							each lista, i in listaUsuarios
+								if (lista._id != user._id)
+									input(type='hidden' name='destinatario_id' value='#{lista._id}')
+							label(for='para') Para:
+							select#para.form-control(name='destinatario')
+								if (user.tipoConta == "administrador")
+									option(value='Todos') Todos
+									each lista, i in listaUsuarios
+										if (lista.nome != user.nome)
+											if (lista.tipoConta == "administrador")
+												//- option(value='#{lista.email}') #{lista.nome} (Administrador)
+											else
+												option(value='#{lista.email}') #{lista.nome} (Associado)
+								else
+									each lista, i in listaUsuarios
+										if (lista.nome != user.nome)
+											if (lista.tipoConta == "administrador")
+												option(value='#{lista.email}') #{lista.nome} (Administrador)								
+								//- if (user.tipoConta == "administrador")
+								//- 	option(value='Todos#{user._id}') Todos
+								//- each lista, i in listaUsuarios
+								//- 	option(value='#{lista._id}') #{lista.nome}
+									//- if (user.tipoConta != "administrador")
+									//- 	if (lista.tipoConta == "administrador")
+									//- 		option(value='#{lista._id}') #{lista.nome}
+									//- else
+									//- 	if (lista.nome != user.nome)
+									//- 		option(value='#{lista._id}') #{lista.nome}
+						.form-group
+							label(for='assunto') Assunto
+							input#assunto.form-control(type='text', name='assunto' required)
+						.form-group
+							input#anexo.form-control(type='file', name='anexo')
+						.form-group
+							label(for='mensagem') Mensagem
+							textarea#mensagem.form-control(cols='30', rows='10', name='mensagem' required)
+						.modal-footer
+							button.btn.btn-default.botaoFechar.pull-left(type='button', data-dismiss='modal') Fechar
+							button.btn.botaoEnviar.pull-right Enviar
+	//- Fim Modal Nova Mensagem
+	script.
+		$('.modal_principal_close').click(function() { 
+			$('.modal_principal').modal('hide');
+		}); 

@@ -1,0 +1,131 @@
+doctype html
+html
+	head
+		title= title
+		meta(charset='UTF-8')
+		meta(name='description', content='')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+		link(rel='stylesheet prefetch', href='/bootstrap/css/bootstrap.css')
+		link(rel='stylesheet', type='text/css', href='/css/estilo.css')
+		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+		link(href='/css/responsive-calendar.css', rel='stylesheet')
+		link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300,400,700")
+
+		script(src='/jquery/jquery-2.2.0.min.js')
+		script(src='/bootstrap/js/bootstrap.min.js')
+		script.
+			function goBack() {
+				window.history.back();
+			}
+
+	body
+		header
+		.home
+			nav.navbar.navbar-inverse
+				.container-fluid
+					.navbar-header
+						button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#myNavbar')
+							span.icon-bar.top-bar
+							span.icon-bar.middle-bar
+							span.icon-bar.bottom-bar
+						a.navbar-brand(href='/')
+							img(alt='logo identidade visual gran royalle', title='Logo Gran Royalle', src='/img/home/logo.png')
+					#myNavbar.collapse.navbar-collapse
+						ul.nav.navbar-nav.navbar-right.pull-right
+							li
+								a(href='/') Home
+							if (user.tipoConta == "associado")
+								li
+									a(href='/boletos') Boletos
+							if (user.tipoConta == "administrador")
+								li
+									a(href='/usuario/cadastrarUsuario') Cadastrar
+								li 
+									a(href='/usuario/alterarSenhaAdmin') Alterar Senha
+							else 
+								li
+									a(href='/usuario/alterarSenha') Alterar Senha
+							li
+								a(href='/documentos/574f49e0be3acd54504bf8a8') Formulários
+							li.dropdown
+								a.dropdown-toggle(href='/documentos')
+									| Documentação 
+									b.caret
+								ul.dropdown-menu
+									each lista, i in listaDocumentos 
+										li.dropdown-itens
+											a(href='/documentos/#{lista._id}') #{lista.tituloDocumento}
+
+							if (user.tipoConta != "associado")
+								li.dropdown
+									a.dropdown-toggle(href='/reservas/listaReservas')
+										| Reservas
+										b.caret
+									ul.dropdown-menu
+										li.dropdown-itens
+											a(href='/reservas/listaReservas') Salão de Festa
+											a(href='/reservas/listaReservasQuadra') Quadra Society
+							li
+								a(href='/noticias') Notícias
+							//- li.dropdown
+							//- 	a.dropdown-toggle(href='/reservas/calendar')
+							//- 		| Faça sua Reserva 
+							//- 		b.caret
+							//- 	ul.dropdown-menu
+							//- 		li.dropdown-itens
+							//- 			a(href='/reservas/calendar') Salão de Festa
+							//- 			a(href='/reservas/calendarQuadra') Quadra Society
+							li
+								a(href='/avisos') Avisos
+							li
+								a(href='/logout') Sair
+							li
+								a(href='/mensagens')
+									i.fa.fa-envelope-o
+		block content
+
+	footer.rodape.row
+		.container
+			.logo.col-md-3
+				img(src='/img/home/logo-branca.png', height='72', width='213', alt='logo gran royalle')
+			.rodapeConteudo.col-md-8
+				nav
+					ul
+						li
+							a(href='/') Home
+						li
+							a(href='/boletos') Boletos
+						if (user._id == "56e71617b1b0adc837edceff")
+							li
+								a(href='/usuario/cadastrarUsuario') Cadastrar
+						else 
+							li
+								a(href='/usuario/alterarSenha') Alterar Senha
+						li
+							a(href='/documentos') Documentação
+						if (user._id == "56e71617b1b0adc837edceff" || "572b91f12fdfbfc4047d5e84")
+							li
+								a(href='/reservas/listaReservas') Lista Reservas
+						li
+							a(href='/noticias') Noticias
+						li
+							a(href='/reservas') Reservas
+						li
+							a(href='/avisos') Avisos
+						li
+							a(href='/logout') Sair
+						li
+							a(href='/mensagens')
+								i.fa.fa-envelope-o
+				hr
+				//- p Newsletter
+				//- .newsletter
+				//- 	input(type='email')
+				//- 	button.btn OK
+				ul.menuSocial
+					li
+						a(href='#')
+							img(src='/img/home/icone-facebook.png', alt='icone facebook')
+				a(href='http://ag3agencia.com.br', target='blank')
+					img.assinaturaAG3(src='/img/home/ag3.png', alt='logo ag3')

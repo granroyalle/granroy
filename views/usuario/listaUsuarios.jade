@@ -1,0 +1,103 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		div
+		.container
+			.row
+				h1.text-center.login-title.listaCondominos Lista de Associados
+				a.btn.btn-success.confirmaModal.pull-right(href='/usuario/imprimirTodos') Imprimir Todos
+			br
+			.row
+				.table-responsive.tabela
+					table#tabela.table.table-striped.table-bordered(cellspacing='0', width='100%')
+						thead
+							tr
+								th(aria-label='ID: activate to sort column ascending') Nome
+								th CPF
+								th E-mail
+								th Unidade								
+								th Número Casa
+								th Ação
+						tbody
+							each lista, i in listaUsuarios
+								if (lista.tipoConta != "administrador" && lista.tipoConta != "portaria")
+									tr
+										td #{lista.nome}
+										td #{lista.cpf}
+										td #{lista.email}
+										td #{lista.unidade}										
+										td #{lista.numeroCasa}
+
+										td
+											a(href='/usuario/editarUsuario/#{lista._id}') Editar | &nbsp
+											a(href='/usuario/alterarSenha/#{lista._id}') Senha | &nbsp
+											//- a(href='/usuario/mensalidadeIndividual/#{lista._id}') Mensalidade | &nbsp
+											a(href='/usuario/dependente/#{lista._id}') Dependentes | &nbsp
+											a(href='/usuario/imprimir/#{lista._id}') Imprimir | &nbsp
+											a#deletar(data-toggle='modal', data-target='##{lista._id}' href='#') 
+												i.fa.fa-trash-o.fa-2x
+
+
+										.modal.fade(role='dialog', id="#{lista._id}")
+											.modal-dialog.modal-md
+												// Modal content
+												.modal-content
+													.modal-header
+														button.close(type='button', data-dismiss='modal') ×
+														h4.modal-title Tem certeza que deseja excluir o "#{lista.nome}"?
+													.modal-body
+														.form-group.pull-right
+															button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+															a.btn.btn-danger.confirmaModal(href='/usuario/deletar/#{lista._id}') Excluir
+														br
+														br
+					//- a.btn.pull-right.btn-imprimir(href='/usuario/imprimirTodos') Imprimir Todos
+				.table-responsive.tabela
+					table#tabela.table.table-striped.table-bordered(cellspacing='0', width='100%')
+						thead
+							tr
+								th(aria-label='ID: activate to sort column ascending') Nome
+								th E-mail
+								th Ação
+						tbody
+							each lista, i in listaUsuarios
+								if (lista.tipoConta == "administrador" || lista.tipoConta == "portaria")
+									tr
+										td #{lista.nome}
+										td #{lista.email}
+
+										td
+											a(href='/usuario/alterarSenha/#{lista._id}') Senha | &nbsp
+											//- a(href='/usuario/mensalidadeIndividual/#{lista._id}') Mensalidade | &nbsp
+											a#deletar(data-toggle='modal', data-target='##{lista._id}' href='#') 
+												i.fa.fa-trash-o.fa-2x
+
+
+										.modal.fade(role='dialog', id="#{lista._id}")
+											.modal-dialog.modal-md
+												// Modal content
+												.modal-content
+													.modal-header
+														button.close(type='button', data-dismiss='modal') ×
+														h4.modal-title Tem certeza que deseja excluir o "#{lista.nome}"?
+													.modal-body
+														.form-group.pull-right
+															button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+															a.btn.btn-danger.confirmaModal(href='/usuario/deletar/#{lista._id}') Excluir
+														br
+														br
+		.container
+			.row
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+
+		script(src='/js/jquery.dataTables.min.js')
+		script(src='/js/dataTables.bootstrap.min.js')
+		script(type='text/javascript').
+			$('#tabela').DataTable({
+				"language": {
+			       "url": "//cdn.datatables.net/plug-ins/1.10.10/i18n/Portuguese-Brasil.json"
+			   }
+			});

@@ -1,0 +1,19 @@
+extends layout
+
+block content
+	main.home
+		section.fotoTopo.row
+			.container
+				
+		section.apresentacao.row
+			.container
+				h4 Olá #{user.nome}, você não tem permissão para acessar este conteúdo. Por favor retorne à tela anterior.
+				br
+				br
+				a.btn.btn-danger.pull-right(href='#', onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+
+	script.
+		function goBack() {
+			window.history.back();
+		}

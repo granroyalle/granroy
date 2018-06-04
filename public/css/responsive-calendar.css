@@ -1,0 +1,131 @@
+.responsive-calendar .controls {
+  text-align: center;
+  padding-top: 80px;
+}
+.responsive-calendar {
+  margin-bottom: 50px;
+}
+.responsive-calendar .controls a {
+  cursor: pointer;
+}
+.responsive-calendar .controls h4 {
+  display: inline;
+}
+.responsive-calendar .day-headers,
+.responsive-calendar .days {
+  font-size: 0;
+}
+.day-headers .day {
+  background-color: #d8dfe9;
+  color: #2873b6;
+}
+.responsive-calendar .day {
+  display: inline-block;
+  position: relative;
+  font-size: 14px;
+  width: 14.285714285714286%;
+  text-align: center;
+}
+.responsive-calendar .day a {
+  background-color: #d8dfe9;
+  color: #fff;
+  display: block;
+  cursor: pointer;
+  padding: 20% 0 20% 0;
+  font-size: 50px;
+  margin-left: 10px;
+  margin-top: 5px;
+  height: 160px;
+}
+.responsive-calendar .day a:hover {
+  background-color: #eee;
+  text-decoration: none;
+}
+.responsive-calendar .day.header {
+  border-bottom: 1px gray solid;
+}
+.responsive-calendar .day.active a {
+  background-color: #1d86c8;
+  color: #ffffff;
+}
+.responsive-calendar .day.active a:hover {
+  background-color: #36a0e2;
+}
+.responsive-calendar .day.active .not-current {
+  background-color: #8fcaef;
+  color: #ffffff;
+}
+.responsive-calendar .day.active .not-current:hover {
+  background-color: #bcdff5;
+}
+.responsive-calendar .day.not-current a {
+  color: #d8dfe9;
+  background-color: #d8dfe9;
+}
+.responsive-calendar .day .badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 1;
+}
+.clear {width: 100%; text-align: center; position: absolute; margin-top: 350px; z-index: 9999;}
+.agendaData {
+  width: 280px;
+  height: 420px;
+  margin: 0 auto;
+  background-color: #648bc4;
+  border-radius: 10px;
+  padding-top: 20px;
+}
+.agendaData .dhv {width: 85%; border-bottom: 1px solid #fff; margin-left: 20px; padding: 15px 0 15px 0;}
+.agendaData .dhv img {float: left; margin-right: 15px;}
+.agendaData .dhv p {padding-top: 5px; color: #fff; font-size: 20px;}
+.agendaData .buttonAge {width: 100%; margin: 0 auto; text-align: center;}
+.agendaData .buttonAge .sabCurso {background-color: #2873b6; color: #fff; border: none; padding: 5px; margin-top: 15px;}
+.agendaData .intercadastrar {text-align: center; width: 100%; margin: 0 auto; margin-top: 15px;}
+
+footer .faixafinal {padding-top: 17px;}
+
+.bgTopo .topo nav {padding-top: 14px;}
+.bgTopo .topo nav ul li {font-size: 16px;}
+.bgTopo .topo nav ul li a {color: #b9b9bb;}
+.bgTopo .topo nav ul li a:hover {border-bottom: none;}
+
+.bgTopo .topo .login {font-size: 16px;}
+.bgTopo .topo .login li a {color: #b9b9bb; margin-top: 10px;}
+.bgTopo .topo .login .cadastrar {}
+
+.bgTopo .topo .busca {float: right; margin-right: 60px;}
+.bgTopo .topo .busca input {font-size: 16px;}
+
+@media screen and (max-width: 960px){
+
+  .bgtopocor {background-color: #edeff0;}
+  .bgTopo {width: 100%;}
+  .bgTopo .topo .logoetc {margin-right: 40px; margin-left: 20px;}
+  .bgTopo .topo nav ul li {padding-right: 18px;}
+  .bgTopo .topo .busca {float: none; margin-right: 0; margin-left: 333px;}
+  .bgTopo .topo .busca input {width: 255px;}  
+
+}
+
+@media screen and (max-width: 730px){
+  .bgTopo {width: 100%; margin: 0 auto; padding-top: 15px;}
+  .bgTopo .topo .responsiveLogo {width: 100%; margin: 0 auto; text-align: center;}
+  .bgTopo .topo .responsiveLogo .logoetc {float: none; margin-right: 0; width: 270px; margin-left: 0; margin-right: 0;}
+
+  .bgTopo .topo nav ul li {color: #fff; font-size: 20px;}
+  .bgTopo .topo nav ul li a {color: #fff;}
+
+  nav {width: 100%;}
+  nav ul li {width: 100%; float: none; color: #fff;}
+  nav ul .bottom {border-bottom: 1px solid #fff; font-size: 22px; padding-bottom: 10px; padding-top: 5px; text-align: center;}
+  .bgTopo .topo .login {float: none; text-align: center; margin-left: 0; margin-top: 185px; margin-right: 25px; font-size: 20px;}
+  .bgTopo .topo .login img {margin-right: 5px;}
+  .bgTopo .topo .login li a {color: #fff;}
+  .bgTopo .topo .login .cadastrar {margin-top: 10px; background-color: #2873b6; border: none; color: #fff; padding: 3px 7px 3px 7px; margin-left: 15px;}
+
+  .bgTopo .topo .busca {float: none; margin-right: 0; margin-left: 0; text-align: center; margin-top: 5px; padding-bottom: 10px;}
+
+}
+

@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+	.row
+		.fotoTopo
+	.row
+		.container.well
+			form.form-horizontal(action='/noticia/fileEdit', method='post', enctype='multipart/form-data')
+				legend.text-center Cadastrar Notícias
+				.row.goBack
+					a.btn.btn-sm.btn-gran.btn-primary.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+				.form-group
+					input(type="hidden" name="id" value="#{mostrar._id}")
+					label.col-md-2.control-label(for='inputData') Data
+					.col-md-3
+						input#inputData.form-control(type='date', name='data', value='#{mostrar.data}')
+
+				.form-group
+					label.col-md-2.control-label(for='inputTitulo') Título
+					.col-md-10
+						input#inputTitulo.form-control(type='text', name='titulo', value='#{mostrar.titulo}')
+
+				//- .form-group
+				//- 	label.col-md-2.control-label(for='inputUrlAmigavel') Url Amigavel
+				//- 	.col-md-10
+				//- 		input#inputUrlAmigavel.form-control(type='text', name='urlAmigavel', value='#{mostrar.urlAmigavel}')
+
+				.form-group
+					label.col-md-2.control-label(for='textArea') Descrição
+					.col-md-10
+						textarea#textarea.form-control(rows='3', name='descricao') #{mostrar.descricao}
+				.form-group
+					label.col-md-2.col-xs-2.control-label Foto Atual
+					.col-md-10.col-xs-4
+						img(src='/file/#{mostrar.foto}' width='250' height='200')
+				.form-group
+					label.col-md-2.col-xs-2.control-label Alterar foto
+					.col-md-10.col-xs-4
+						input(name='anexo', type='file')
+				button.btn.btn-gran.btn-primary.pull-right(type='submit') Cadastrar
+	.container
+		.row
+			a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+				i.fa.fa-reply &nbsp Voltar
+
+	script.
+		function goBack() {
+			window.history.back();
+		}
+
+	//- script(src='/js/tinymce/tinymce.min.js')
+	//- script.
+	//- 	tinymce.init({
+	//- 		language : 'pt_BR',
+	//- 		language_url: '/tinymce/js/tinymce/langs/pt_BR.js',
+	//- 		selector: 'textarea',
+	//- 		height: 150,
+	//- 		toolbar: false,
+	//- 		content_css: [
+	//- 			'//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+	//- 			'//www.tinymce.com/css/codepen.min.css'
+	//- 		],
+	//- 	});

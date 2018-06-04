@@ -1,0 +1,67 @@
+extends layout
+	
+block content
+	main.home
+		section.fotoTopo.row
+			.container
+				p Olá #{user.nome}!
+		section.apresentacao.row
+			.container
+				.item.col-md-5.col-md-offset-1.hoverIndex
+					a(href='boletos')
+						i.fa.fa-barcode
+						h2 Boletos
+						p
+							| Consulte os valores atualizados da mensalidade, acompanhe a data de vencimento e imprima os próximos boletos no seu painel de controle.
+				.item.col-md-5.hoverIndex
+					a(href='avisos')
+						i.fa.fa-warning
+						h2 Avisos
+						p
+							| Fique atento aos avisos para receber novidades, informativos e atualizações a respeito da área comum do condomínio.
+				.item.col-md-5.col-md-offset-1.hoverIndex
+					a(href='noticias')
+						i.fa.fa-newspaper-o
+						h2 Notícias
+						p
+							| Confira as últimas notícias e fique por dentro de tudo o que acontece no Residencial Gran Royalle e em nossa cidade.
+				.item.col-md-5.hoverIndex
+					a(href='mensagens')
+						i.fa.fa-envelope-o
+						h2 Mensagens
+						p
+							| Você pode acessar a sua caixa de entrada para verificar as mensagens recebidas ou entrar em contato com a nossa equipe.
+		section.mural.row
+			.container
+				.noticias.col-md-5.col-md-offset-1
+					h2 Últimas Notícias
+					each lista, i in listaNoticia
+						a(href='noticias')
+							.noticia.col-xs-12
+								.data
+									p #{moment(lista.data).format('DD')}
+									p #{moment(lista.data).format('MMM')}
+								.texto
+									span #{lista.titulo}
+									- var descricao = string(lista.descricao).left(85).toString();
+									if (descricao.length > 84) 
+										p #{descricao}...
+									else 
+										p #{descricao}
+
+				.avisos.col-md-5.col-md-offset-1
+					h2 Últimos Avisos
+					each lista, i in listaAvisos
+						a(href='avisos')
+							.noticia.col-xs-12
+								.data
+									p #{moment(lista.data).format('DD')}
+									p #{moment(lista.data).format('MMM')}
+								.texto
+									span #{lista.titulo}
+									- var descricao = string(lista.descricao).left(85).toString();
+									if (descricao.length > 84) 
+										p #{descricao}...
+									else 
+										p #{descricao}
+		

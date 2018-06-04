@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+	main.noticia
+		section.fotoTopo.row
+		section.divNoticia
+			.container
+				h2 #{valor.titulo}
+				p #{valor.descricao}
+				img(src='/file/#{valor.foto}' width="100%")
+			.container
+				.row
+					a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar

@@ -1,0 +1,85 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias
+			.faixa
+				h1 Documentação
+			- var usuario = user.tipoConta
+			if (usuario == 'administrador')
+				.container
+					.row
+						a(data-toggle='modal', data-target='#novoDocumento')
+							button.btn.btn-gran.pull-right.btn-primary
+								p Novo Documento
+
+					.modal.fade(role='dialog', id='novoDocumento')
+						.modal-dialog.modal-md
+							// Modal content
+							.modal-content
+								.modal-header
+									button.close(type='button', data-dismiss='modal') ×
+									h4.modal-title novo Documento
+								.modal-body.row									
+									form.form-group(action='/documentos/nomeDocumento', method='post')
+										label.col-md-12.control-label(for='inputNome') nome Documento
+										.col-md-12
+											input#inputNome.form-control(type='text', name='tituloDocumento')
+
+										button.btn.btn-primary.confirmaModal.pull-right.cadastrarNome Cadastrar
+										button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+				.container
+					each lista, i in listaDocumentos
+						.col-lg-2.col-md-3.col-sm-6.col-xs-12
+							.faixa-granVerde
+								a(href='/documentos/#{lista._id}')
+									i.fa.fa-archive.fa-5x
+									p #{lista.tituloDocumento}
+							.faixa-gran
+								a.col-xs-6.faixa-granBlue(data-toggle='modal', data-target='#renomear#{lista._id}' href='#')
+									p Renomear
+								.modal.fade(role='dialog', id='renomear#{lista._id}')
+									.modal-dialog.modal-md
+										// Modal content
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title novo Documento
+											.modal-body.row									
+												form.form-group(action='/documentos/renomearDocumento/#{lista._id}', method='post')
+													label.col-md-12.control-label(for='inputNome') nome Documento
+													.col-md-12
+														input#inputNome.form-control(type='text', name='tituloDocumento', value='#{lista.tituloDocumento}')
+
+													button.btn.btn-primary.confirmaModal.pull-right.cadastrarNome Renomear
+													button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+								a.col-xs-5.faixa-granRed(data-toggle='modal', data-target='#excluir#{lista._id}')
+									i.fa.fa-trash-o.fa-2x
+
+								.modal.fade(role='dialog', id='excluir#{lista._id}')
+									.modal-dialog.modal-md
+										// Modal content
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title Excluir Documento
+											.modal-body.row									
+												form.form-group(action='/documentos/excluirDocumento/#{lista._id}', method='post')
+													label.col-md-12.control-label(for='inputNome') Deseja exlcuir o documento "#{lista.tituloDocumento}" ?
+
+													button.btn.btn-danger.confirmaModal.pull-right.cadastrarNome Excluir
+													button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+
+			else
+				.container
+					each lista, i in listaDocumentos
+						.col-lg-2.col-md-3.col-sm-6
+							.faixa-granVerde
+								a(href='/documentos/#{lista._id}')
+									i.fa.fa-archive.fa-5x
+									p #{lista.tituloDocumento}
+		.row.deuRuimColor
+			.container
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar

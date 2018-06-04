@@ -1,0 +1,50 @@
+extends ../layout
+
+block content
+	main.noticia
+		section.fotoTopo.row
+		section.divNoticia
+			.container
+				h2 #{valor.titulo}
+				p #{valor.descricao}
+			br
+			br
+			br
+			.container
+				.row
+					a.btn.btn-sm.btn-gran(data-toggle='modal', data-target='#comentar' href='#') Comentar
+					.modal.fade(role='dialog', id='comentar')
+						.modal-dialog.modal-md
+							// Modal content
+							.modal-content
+								.modal-header
+									button.close(type='button', data-dismiss='modal') ×
+									h4.modal-title Comentario
+								.modal-body
+									form.form-horizontal(method='post' action="/avisos/comentario", entype='multipart/form-data')
+										.form-group
+											input(type='hidden' name='idAviso' value='#{valor._id}')
+											input(type='hidden' name='idUser' value='#{user._id}')
+											input(type='hidden' name='nomeUser' value='#{user.nome}')
+										.form-group
+											.col-md-12								
+												textarea#textComentario.form-control(type='text', name='comentario', required)
+
+										button.btn.btn-gran.confirmaModal.pull-right(type='submit') Comentar
+										button.btn.btn-default.cancelarModal.pull-right(type='button', data-dismiss='modal') Cancelar
+										br
+										br
+			.container
+				.row
+					h2.pull-left Comentarios
+				.row
+					each lista, i in listaComentario
+						strong(style="color: #6cab68") #{lista.nomeUser} disse:
+						br
+						strong(style="margin-left: 20px; margin-top: 5px; color: #000") #{lista.comentario}
+						br
+				
+		.row.deuRuimColor
+			.container
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar

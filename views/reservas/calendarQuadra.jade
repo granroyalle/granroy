@@ -1,0 +1,168 @@
+extends ../layout
+
+block content
+	link(rel='stylesheet' href='/bower_components/fullcalendar/dist/fullcalendar.css')
+	script(src='/bower_components/jquery/dist/jquery.min.js')
+	script(src='/bower_components/moment/min/moment.min.js')
+	script(src='/bower_components/fullcalendar/dist/fullcalendar.js')
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias.reservas
+			.faixa
+				h1 Reservas Quadra Society
+			.container
+				#aquiVemTudo
+			.container
+				.row
+					a(href='#' data-toggle='modal', data-target='#reserva' style="float: right; margin-left: 15px;")
+						button.btn Reserve
+					.modal.fade(role='dialog', id='reserva')
+						.modal-dialog.modal-md
+							// Modal content
+							.modal-content
+								.modal-header
+									button.close(type='button', data-dismiss='modal') ×
+									h4.modal-title Reservar
+								.modal-body
+									form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+										.form-group
+											input(type='hidden' name='idUser' value='#{user._id}')
+											input(type='hidden' name='title' value='#{user.nome}')
+										.form-group#modalidade
+											label.col-md-3.control-label(for='inputData') Modalidade
+											.col-md-8
+												select.form-control(name='modalidade' id="myModalidade" disabled)
+													option(value='Quadra Society') Quadra Society											
+										.form-group#dataInicio
+											label.col-md-3.control-label(for='inputData' ) Data
+											.col-md-8
+												input.form-control(type='date' name='start' id='myinput' required)
+										.form-group#horaInicio
+											label(for='inputData').col-md-3.control-label Hora Inicio
+											.col-md-8
+												//- input#inputHora1.form-control(type='time' name='horaInicio' min='08:00' max='22:00' onchange='testeFunction1()' required)
+												select.form-control(name='horaInicio' id='myHoraInicio')
+													option Selecionar hora
+													option(value='08:00') 08:00
+													option(value='09:00') 09:00
+													option(value='10:00') 10:00
+													option(value='11:00') 11:00
+													option(value='12:00') 12:00
+													option(value='13:00') 13:00
+													option(value='14:00') 14:00
+													option(value='15:00') 15:00
+													option(value='16:00') 16:00
+													option(value='17:00') 17:00
+													option(value='18:00') 18:00
+													option(value='19:00') 19:00
+													option(value='20:00') 20:00
+													option(value='21:00') 21:00
+													option(value='22:00') 22:00
+										.form-group
+											label(for='inputData').col-md-3.control-label Hora Termino
+											.col-md-8
+												select.form-control(name='horaTermino' id='horaTermino1')
+
+										br
+										br
+
+										button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+										button.btn.btn-primary.confirmaModal(type='submit') Reservar
+					#calendar
+	script.
+		$(document).ready(function() {
+			//- var testeDados = $("#testeDados").val();
+		 //-    // page is now ready, initialize the calendar...  
+		 	var link = $(location).attr('href');
+			var url = link.split('/');
+			
+		    $.getJSON(""+url[0]+"//"+url[2]+"/reservas/jsonQuadra", function( data ) {
+		    	//- var nome = [];
+		    	//- var dataBanco = [];
+				//- var todosDados = [];
+				//- $.each( data, function( key, val ) {
+				//- 	//- nome.push(""+val.nomeUser+"");
+				//- 	//- dataBanco.push(""+val.data+"");
+				//- 	todosDados.push("{title:'"+val.nomeUser+"',start:'"+val.data+"'}");
+				//- });
+				//- var temQueDaCerto = '['+todosDados+']';
+				//- alert(temQueDaCerto);
+				$('#calendar').fullCalendar({
+				    events: data,
+					eventClick: function(event) {
+						if (event.url) {
+							window.open("http://www.granroyallepousoalegre.com.br/");
+							return false;
+						}
+					}
+			    });
+				var warning2 = $('<p style="color: red;">').text('A reserva tem que ser feita com antecedencia de 7 dias!');		
+				
+				$('#myinput').change(function(e) {
+					var dataCompleta = $('#myinput').val();
+					var mesAtualSistema = new Date;
+					var mesAtual = mesAtualSistema.getMonth(); 
+					var splitMes = dataCompleta.split('-');
+					var mes = splitMes[1];
+					var mesAtualPlus = mesAtual + 01;
+
+					var d = new Date(e.target.value);				  
+					var data = d.getDate();
+					var dataTeste = new Date;				  
+					var dataAtual = dataTeste.getDate();
+
+					var dateMesDiaSistema = dataAtual + mesAtualPlus;
+
+					var dataPlus = data - 5;			  
+					if(dataAtual >= dataPlus) {
+						$('#mysubmit').attr('disabled',true)
+						$('#myinput').after(warning2);
+						$('#myinput').val("");
+					} else {
+						warning2.remove()
+						$('#mysubmit').attr('disabled',false);
+					}
+				})
+			});
+			$('#myHoraInicio').change(function() {
+				var x = $('#myHoraInicio').val();
+				var result = parseInt(x) + parseInt('01:00');
+				document.getElementById("horaTermino1").innerHTML = "<option value='"+result+":00'>"+result+":00</option>";
+			});
+			//- var warning = $('<p>').text('Não é possível realizar reservas aos domingos!');
+			//- $('#myinput').change(function(e) {
+			//- 
+			//-       var d = new Date(e.target.value)
+			//-       if(d.getDay() === 6) {
+			//-         $('#mysubmit').attr('disabled',true)
+			//-         $('#myinput').after(warning);
+			//-         $('#myinput').val("");
+			//-       } else {
+			//-         warning.remove()
+			//-        $('#mysubmit').attr('disabled',false);
+			//-     }
+			//- })
+		});
+			//- $('#calendar').fullCalendar({
+			//-     events: function(start, end, timezone, callback) {
+			//-         $.ajax({
+			//-             url: 'http://localhost:4000/reservas/json',
+			//-             dataType: 'json',
+			//-             data: {
+			//-                 // our hypothetical feed requires UNIX timestamps
+			//-                 start: start.unix(),
+			//-                 end: end.unix()
+			//-             },
+			//-             success: function(doc) {
+			//-                 var events = [];
+			//-                 $(doc).find('event').each(function() {
+			//-                     events.push({
+			//-                         title: $(this).attr('title'),
+			//-                         start: $(this).attr('start') // will be parsed
+			//-                     });
+			//-                 });
+			//-                 callback(events);
+			//-             }
+			//-         });
+			//-     }
+			//- });

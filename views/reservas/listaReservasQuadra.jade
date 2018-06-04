@@ -1,0 +1,751 @@
+extends ../layout
+
+block content
+	link(rel='stylesheet' href='/bower_components/fullcalendar/dist/fullcalendar.css')
+	script(src='/bower_components/jquery/dist/jquery.min.js')
+	script(src='/bower_components/moment/min/moment.min.js')
+	script(src='/bower_components/fullcalendar/dist/fullcalendar.js')
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias.reservas
+			.faixa
+				h1 Reservas Quadra Society
+			.row
+				.container
+					- var usuario = user.tipoConta
+					if (usuario == 'administrador' || usuario == 'porteiro')
+						#calendar
+					else
+						p Área restrita!
+						a(href="../../") Voltar
+	script.
+		$(document).ready(function() {
+			var testeDados = $("#testeDados").val();
+				// page is now ready, initialize the calendar...  
+			var link = $(location).attr('href');
+			var url = link.split('/');
+			$.getJSON(""+url[0]+"//"+url[2]+"/reservas/jsonQuadra", function( data ) {
+				//- var url = [];
+				//- var nome = [];
+				//- var dataBanco = [];
+				//- var todosDados = [];
+				//- $.each( data, function( key, val ) {
+				//- 	url.push(""+val._id+"");
+				//- 	nome.push(""+val.nomeUser+"");
+				//- 	dataBanco.push(""+val.data+"");
+				//- 	todosDados.push("{title:'"+val.nomeUser+"',start:'"+val.data+"',url:'http://google.com/'}");
+				//- });
+				$('#calendar').fullCalendar({
+					weekends: true, // will hide Saturdays and Sundays
+					events: data,
+					eventClick: function(event) {
+						if (event.url) {
+							window.open(event.url);
+							return false;
+						}
+					}
+				});
+			});
+			var warning = $('<p>').text('Não é possível realizar reservas aos domingos!');
+			var warning2 = $('<p>').text('A reserva tem que ser feita com antecedencia de 7 dias!');		
+			
+			$('#myinput').change(function(e) {
+				var dataCompleta = $('#myinput').val();
+				var mesAtualSistema = new Date;
+				var mesAtual = mesAtualSistema.getMonth(); 
+				var splitMes = dataCompleta.split('-');
+				var mes = splitMes[1];
+				var mesAtualPlus = mesAtual + 01;
+
+				var d = new Date(e.target.value);				  
+				var data = d.getDate();
+				var dataTeste = new Date;				  
+				var dataAtual = dataTeste.getDate();
+
+				var dateMesDiaSistema = dataAtual + mesAtualPlus;
+				alert(dateMesDiaSistema);
+
+
+				if(d.getDay() === 6) {
+					$('#mysubmit').attr('disabled',true)
+					$('#myinput').after(warning);
+					$('#myinput').val("");
+				} else {
+					warning.remove()
+				$('#mysubmit').attr('disabled',false);
+				}
+				
+				var dataPlus = data - 5;			  
+				if(dataAtual >= dataPlus) {
+					$('#mysubmit').attr('disabled',true)
+					$('#myinput').after(warning2);
+					$('#myinput').val("");
+				} else {
+					warning2.remove()
+					$('#mysubmit').attr('disabled',false);
+				}
+			})
+		});
+	//- .container
+	//- 	.row
+			//- form.form-group.col-md-10.pull-right(action='/reservas/reservasFiltrada' method='POST')
+			//- 	input.barraDePesquisa.pull-right.col-md-3.control-label(type='date', name='data')
+			//- 	button.lupazinha.pull-right
+			//- 		img(src='/img/home/lupaPesquisa.png' width='100%')
+//- 	.container
+//- 		.row
+//- 			a(href='/reservas/listaReservas')
+//- 				.col-md-6.escolhaModalidade
+//- 					p Salão de Festa
+//- 					.linhaActiveModalidade
+//- 					.activeModalidade
+//- 			a(href='/reservas/listaReservasQuadra')
+//- 				.col-md-6.escolhaModalidade
+//- 					p Quadra Society
+//- 					.linhaActiveModalidade
+//- 					.activeModalidade
+//- 	.container
+//- 		.row.listaRegras
+//- 			//- each lista, i in listaReservas
+//- 			//- 	if (moment(lista.data).format('MMM') == moment(dataAtual).format('MMM'))							
+//- 			//- 		.bloco.col-md-3
+//- 			//- 			if (moment(lista.data).format('DD') < moment(dataAtual).format('DD') && moment(lista.data).format('MMM') <= moment(dataAtual).format('MMM'))
+//- 			//- 				.data
+//- 			//- 					p #{moment(lista.data).format('DD')}
+//- 			//- 					p #{moment(lista.data).format('MMM')}
+//- 			//- 				.conteudo
+//- 			//- 					.titulo
+//- 			//- 						h2 Reserva Encerrada
+//- 			//- 					.texto
+//- 			//- 						- var modalidade = lista.modalidade
+//- 			//- 						if (modalidade == "Salão de Festa")
+//- 			//- 							p reservado por #{lista.nomeUser}.
+//- 			//- 						else 
+//- 			//- 							p reservado por #{lista.nomeUser} às #{lista.horaInicio}.
+//- 			//- 			else
+//- 			//- 				.data.expirado
+//- 			//- 					p #{moment(lista.data).format('DD')}
+//- 			//- 					p #{moment(lista.data).format('MMM')}
+//- 			//- 				.conteudo
+//- 			//- 					.titulo.expirado
+//- 			//- 						h2 #{lista.modalidade}
+//- 			//- 					.texto
+//- 			//- 						- var modalidade = lista.modalidade
+//- 			//- 						if (modalidade == "Salão de Festa")
+//- 			//- 							p reservado por #{lista.nomeUser}.
+//- 			//- 						else
+//- 			//- 							each lista, i in listaReservasData
+//- 			//- 								p reservado por #{lista.nomeUser} às #{lista.horaInicio}.
+//- 			//- 				a(href='#' data-toggle='modal', data-target='#reserva')
+//- 			//- 					button.btn Escolha outro horário
+//- 			- var x = 1
+//- 			- var dataCompleta = moment(dataAtual).format('MM-DD-YYYY')
+//- 			- var mes = moment(dataAtual).format('MM')
+//- 			- var ano = moment(dataAtual).format('YYYY')
+//- 			- var horaAtual = moment(dataAtual).format('HH')
+//- 			- var minutoAtual = moment(dataAtual).format('mm')
+//- 			- var horaMinutoAtual = horaAtual+':'+minutoAtual
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva1
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva2
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva3
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva4
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva5
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva6
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva7
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva8
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p 0#{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva9
+//- 								- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva10
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva11
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva12
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva13
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva14
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva15
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva16
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva17
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva18
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva19
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva20
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva21
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva22
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva23
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva24
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva25
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva26
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva27
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva28
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva29
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva30
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+//- 			- x++
+//- 				.bloco.col-md-3
+//- 					.data
+//- 						p #{x}
+//- 						p #{moment(dataAtual).format('MMM')}
+//- 					.conteudo
+//- 						.titulo
+//- 							h2 Quadra Society
+//- 						.texto
+//- 							each lista, i in reserva31
+//- 								- var datacompletadaxs = mes+'-'+x+'-'+ano
+//- 								if (datacompletadaxs > dataCompleta)
+//- 									a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 										p #{lista.title}: #{lista.horaInicio}
+//- 								else
+//- 									if (datacompletadaxs == dataCompleta)
+//- 										if (horaMinutoAtual < lista.horaInicio)
+//- 											a(href='/reservas/imprimirQuadra/#{lista._id}')
+//- 												p #{lista.title}: #{lista.horaInicio}
+
+//- 		.row.btnReservar
+//- 			- var usuario = user.tipoConta
+//- 			if (usuario == 'administrador' || "portaria")
+//- 				a(href='/reservas/listaReservas')
+//- 					button.btn.btn-gran.btn-primary
+//- 						p Lista de Reservas
+//- 			//- a(data-toggle='modal', data-target='#reserva' href='#')
+//- 			//- 	button.btn.btn-gran.btn-primary
+//- 			//- 		p Reservar
+//- .container
+//- 	.row
+//- 		a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+//- 			i.fa.fa-reply &nbsp Voltar
+//- script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')		
+//- script(src='/jquery/mask.min.js')

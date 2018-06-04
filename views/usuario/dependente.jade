@@ -1,0 +1,152 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row				
+		div
+			div.row
+				div.col-sm-6.col-md-4.col-md-offset-4.divCadastrar
+					h1.text-center.login-title Cadastrar Dependentes
+					br
+					div.signup-wall
+						form(class='form-signin formCadastrarListando', action='/usuario/registrarDependente', method='POST')
+							label(class='labelFormCadastrar') Nome
+							p.nomePaiDependente #{verUsuario.nome}
+							input(type='hidden' value='#{verUsuario._id}' name='idPai')
+							div.depedentes
+								a.add_button(href='javascript:void(0);', title='Add field')
+									p Adcionar mais Dependentes
+								br
+								label(class='labelFormCadastrar') Dependentes
+								br
+								br
+								a.add_button(href='javascript:void(0);', title='Add field')
+									img(src='/img/home/buttonMais.png')
+								input(type='number', name='numeroDependente', class='form-control telefone', id='numeroDedependenteCampoPrincipal' placeholder='Campo Automatico' ReadOnly="True" onkeyup="validar(this,'text');")
+								br
+								br
+								br
+								.field_wrapper
+									div
+										input(type='text', name='nomeDependente', class='form-control telefone', id='numeroDedependente' placeholder='Nome do Dependentes', required)
+										input(type='text', name='telefoneDependente', class='form-control telefone phone', id='numeroDedependente' placeholder='Telefone do Dependentes', required)
+										input(type='text', name='vinculoDependente', class='form-control telefone', id='numeroDedependente' placeholder='Vínculo do Dependentes', required)
+										//- a.add_button(href='javascript:void(0);', title='Add field')
+										//- 	img(src='/img/home/buttonMais.png')
+							br
+							button(class='btn btn-lg btn-primary btn-block', type='submit') Registrar
+							span.clearfix
+							a(href='../listaUsuarios', class='btn btn-link btn-block', type='submit') Ver lista de cadastrados
+							span.clearfix
+							
+							br
+							br
+		.container
+			.row
+				.table-responsive.tabela
+					table#tabela.table.table-striped.table-bordered(cellspacing='0', width='100%')
+						thead
+							tr
+								th(aria-label='ID: activate to sort column ascending') Nome
+								th Telefone
+								th Vínculo
+								th Editar
+								th Excluir
+						tbody
+							each lista, i in listaDependente
+								if (lista.tipoConta != "administrador" || lista.tipoConta != "portaria")
+									tr
+										td #{lista.nomeDependente}
+										td #{lista.telefoneDependente}
+										td #{lista.vinculoDependente}
+
+										td
+											a#deletar(data-toggle='modal', data-target='#editar#{lista._id}' href='#') Editar
+
+										.modal.fade(role='dialog', id="editar#{lista._id}")
+											.modal-dialog.modal-md
+												// Modal content
+												.modal-content
+													.modal-header
+														button.close(type='button', data-dismiss='modal') ×
+														h4.modal-title Editar "#{lista.nomeDependente}"?
+													.modal-body.row
+														.form-group
+															form(class='form-signin formCadastrarListando', action='/usuario/editarDependente/#{lista._id}', method='POST')
+																input(type='text', name='nomeDependente', class='form-control', id='numeroDedependente' value='#{lista.nomeDependente}')
+																br
+																input(type='text', name='telefoneDependente', class='form-control', id='numeroDedependente' value='#{lista.telefoneDependente}')
+																br
+																input(type='text', name='vinculoDependente', class='form-control', id='numeroDedependente' value='#{lista.vinculoDependente}')
+																br
+																.form-group.pull-right
+																	button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+																	button.btn.btn-primary.confirmaModal Editar
+										td
+											a#deletar(data-toggle='modal', data-target='##{lista._id}' href='#' style='padding-left: 15px;') 
+												i.fa.fa-trash-o.fa-2x
+
+
+										.modal.fade(role='dialog', id="#{lista._id}")
+											.modal-dialog.modal-md
+												// Modal content
+												.modal-content
+													.modal-header
+														button.close(type='button', data-dismiss='modal') ×
+														h4.modal-title Tem certeza que deseja excluir o "#{lista.nomeDependente}"?
+													.modal-body
+														.form-group.pull-right
+															button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+															a.btn.btn-danger.confirmaModal(href='/usuario/deletarDependente/#{lista._id}') Excluir
+														br
+														br
+		.container
+			.row
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')		
+		script(src='/jquery/mask.min.js')
+		script.
+			$(document).ready(function(){
+				var maskBehavior = function (val) {
+				 return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+				},
+				options = {onKeyPress: function(val, e, field, options) {
+				 field.mask(maskBehavior.apply({}, arguments), options);
+				 }
+				};
+				 
+				$('.phone').mask(maskBehavior, options);
+			});		
+	
+			$(document).ready(function(){
+				var maxField = 100; //Input fields increment limitation
+				var addButton = $('.add_button'); //Add button selector
+				var wrapper = $('.field_wrapper'); //Input field wrapper
+				var teste = $('#numeroDedependenteCampoPrincipal');
+				var fieldHTML = '<div><input type="text" name="nomeDependente" class="form-control telefone" placeholder="Nome do Dependente" /><input type="text" name="telefoneDependente" class="form-control telefone phone" placeholder="Telefone do Dependente"/><input type="text" name="vinculoDependente" class="form-control telefone" placeholder="Vínculo do Dependente"/><a href="javascript:void(0);" class="remove_button" title="Remove field"><img src="/img/home/buttonMenos.png" /></a></div>'; //New input field html 
+				var x = 1; //Initial field counter is 1
+				$(addButton).click(function(){ //Once add button is clicked
+					if(x < maxField){ //Check maximum number of input fields
+						x++; //Increment field counter
+						$(wrapper).append(fieldHTML); // Add field html
+						var teste = x;
+						$('#numeroDedependenteCampoPrincipal').val(teste);
+					}
+				});
+				$(wrapper).on('click', '.remove_button', function(e){ //Once remove button is clicked
+					e.preventDefault();
+					$(this).parent('div').remove(); //Remove field html
+					x--; //Decrement field counter
+					var teste = x;
+					$('#numeroDedependenteCampoPrincipal').val(teste);
+				});
+			});
+			function validar(dom,tipo){
+				switch(tipo){
+					case'num':var regex=/[A-Za-z]/g;break;
+					case'text':var regex=/\d/g;break;
+				}
+				dom.value=dom.value.replace(regex,'');
+			}

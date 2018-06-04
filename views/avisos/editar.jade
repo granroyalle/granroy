@@ -1,0 +1,53 @@
+extends ../layout
+
+block content
+	.row
+		.fotoTopo
+	.row
+		.container.well
+			form.form-horizontal(method='post' action="/avisos/editarCad/#{mostrar._id}", entype='multipart/form-data')
+				legend.text-center Editar Avisos
+				.row.goBack
+					a.btn.btn-sm.btn-gran.btn-primary.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Data
+					.col-md-3
+						input#inputData.form-control(type='date', name='data', value='#{mostrar.data}')
+
+				.form-group
+					label.col-md-2.control-label(for='inputTitulo') Título
+					.col-md-10
+						input#inputTitulo.form-control(type='text', name='titulo', value='#{mostrar.titulo}')
+
+				//- .form-group
+				//- 	label.col-md-2.control-label(for='inputUrlAmigavel') Url Amigavel
+				//- 	.col-md-10
+				//- 		input#inputUrlAmigavel.form-control(type='text', name='urlAmigavel', value='#{mostrar.urlAmigavel}')
+
+				.form-group
+					label.col-md-2.control-label(for='textArea') Descrição
+					.col-md-10
+						textarea#textarea.form-control(rows='3', name='descricao') #{mostrar.descricao}
+
+				button.btn.btn-gran.btn-primary.pull-right Editar
+
+	script.
+		function goBack() {
+			window.history.back();
+		}
+
+	//- script(src='/js/tinymce/tinymce.min.js')
+	//- script.
+	//- 	tinymce.init({
+	//- 		language : 'pt_BR',
+	//- 		language_url: '/tinymce/js/tinymce/langs/pt_BR.js',
+	//- 		selector: 'textarea',
+	//- 		height: 150,
+	//- 		toolbar: false,
+	//- 		content_css: [
+	//- 			'//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+	//- 			'//www.tinymce.com/css/codepen.min.css'
+	//- 		],
+	//- 	});

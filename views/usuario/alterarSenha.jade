@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		div
+			div.row
+				div.col-sm-6.col-md-4.col-md-offset-4.divCadastrar
+					h1.text-center.login-title Alterar Senha
+					hr
+					if (user.tipoConta != "administrador")
+						div.signup-wall
+							form(class='form-signin formCadastrarListando', action='/usuario/alterarSenhaCad/#{user._id}', method='POST')
+								label(class='labelFormCadastrar') Nome
+								p(class='labelFormCadastrar' style='margin-left: 15px;') #{user.nome}
+								br
+								label(class='labelFormCadastrar') Nova Senha
+								input(type='password', name='password', class='form-control cpf', required)
+								br
+								
+								button(class='btn btn-lg btn-primary btn-block', type='submit') Editar
+								span.clearfix
+								a(href='/', class='btn btn-link btn-block', type='submit') Cancelar
+								span.clearfix
+					else
+						div.signup-wall
+							form(class='form-signin formCadastrarListando', action='/usuario/alterarSenhaCadAdmin/#{listaUsuarios._id}', method='POST')
+								label(class='labelFormCadastrar') Nome
+								p(class='labelFormCadastrar' style='margin-left: 15px;') #{listaUsuarios.nome}
+								br
+								label(class='labelFormCadastrar') Nova Senha
+								input(type='password', name='password', class='form-control cpf', required)
+								br
+								
+								button(class='btn btn-lg btn-primary btn-block', type='submit') Editar
+								span.clearfix
+								a(href='/', class='btn btn-link btn-block', type='submit') Cancelar
+								span.clearfix
+			.container
+				.row
+					a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar

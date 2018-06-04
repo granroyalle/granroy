@@ -1,0 +1,535 @@
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,400italic,600);
+@import url(https://fonts.googleapis.com/css?family=Muli:300,400,700);
+
+body, figure, h1, h2, h3, h4, ul, p {margin: 0; border: 0; padding: 0;}
+a {text-decoration: none;}
+* {box-sizing: border-box; list-style: none; font-family: 'Lato', sans-serif;}
+.row {margin: 0;}
+
+/*MENU*/
+
+	.navbar {border-radius: 0px; height: 90px; margin-bottom: 0px; border: none; z-index: 999; background-color: transparent;}
+	.container-fluid {max-width: 1200px; min-height: 90px;}
+	.navbar-header, .navbar-brand, .navbar-right, .navbar-right li {min-height: 90px;}
+	.navbar-inverse .navbar-nav > .active > a {color: #fff; background-color: transparent !important; color: #fff !important;}
+	.navbar-inverse .navbar-nav > .active:hover > a {background-color: transparent; color: #fff;}
+	/* .navbar-right {width: 82%;} */
+	.navbar-right li {margin: 0 6px;}
+	.navbar-right li a {color: #fff !important; margin-top: 35px; text-align: center; padding: 0;}
+	.navbar-right li a i {font-weight: bolder; font-size: 14px;}
+	.navbar-right li:hover a {color: #fff !important;}
+	.navbar-brand {padding-top: 13px;}
+
+	.navbar-nav .dropdown:hover .dropdown-menu {display: block;}
+	.navbar-nav .dropdown .dropdown-menu {background-color: #1a5b2d; margin-top: -31px; margin-right: -45px;}
+	.navbar-nav .dropdown .dropdown-menu li.dropdown-itens {min-height: 40px; font-size: 18px;}
+	.navbar-nav .dropdown .dropdown-menu li.dropdown-itens a {margin-top: 0;}
+	.navbar-nav .dropdown .dropdown-menu li.dropdown-itens a:hover {background-color: #000;}
+
+	.navbar-inverse .navbar-toggle {border: none; margin-top: 30px; background-color: transparent !important; }
+	/*.navbar-inverse .navbar-toggle:hover {background-color: #007577 !important;}*/
+	.navbar-inverse .navbar-toggle .icon-bar {background-color: #fff;}
+	/*.navbar-inverse .navbar-toggle:hover .icon-bar {background-color: #fff;}*/
+
+	.navbar-toggle .icon-bar {
+	width: 22px;
+	transition: all 0.2s;
+	}
+	.navbar-toggle.collapsed .top-bar {
+	transform: rotate(0);
+	}
+	.navbar-toggle.collapsed .middle-bar {
+	opacity: 1;
+	}
+	.navbar-toggle.collapsed .bottom-bar {
+	transform: rotate(0);
+	}
+	.navbar-toggle .top-bar {
+	transform: rotate(45deg);
+	transform-origin: 10% 10%;
+	}
+	.navbar-toggle .middle-bar {
+	opacity: 0;
+	}
+	.navbar-toggle .bottom-bar {
+	transform: rotate(-45deg);
+	transform-origin: 10% 90%;
+	}
+
+
+
+	.divMensagens a {outline: none;}
+
+
+
+/*FOTO TOPO*/
+
+	.fotoTopo {position: relative; padding-top: 330px; float: left; margin-top: -90px; width: 100%; height: 400px; background: url(../img/home/foto-topo.jpg) no-repeat center; background-size: cover;}
+	.fotoTopo p {color: #fff; font-size: 30px; font-style: italic;}
+
+
+/*RODAPE*/
+	.rodape {position: relative; float: left; width: 100%; padding-top: 35px; background-color: #2c7d3d;}
+	.rodape .rodapeConteudo {position: relative; padding-bottom: 70px;}
+	.rodape .rodapeConteudo nav ul li {display: inline-block; margin: 0 1.3%;}
+	.rodape .rodapeConteudo nav ul li a {color: #fff; text-decoration: none; font-weight: 300;}
+	.rodape .rodapeConteudo hr {margin: 0; margin-top: 5px; height: 1px;}
+	.rodape .rodapeConteudo p {margin-top: 15px; color: #fff; font-size: 14px; text-transform: uppercase; margin-bottom: 5px;}
+	.rodape .rodapeConteudo .newsletter {max-width: 240px; height: 30px; margin-bottom: 5px; float: left;}
+	.rodape .rodapeConteudo .newsletter input {width: 85%; padding-left: 15px; float: left; height: 30px; border: none; outline: none; color: #fff; background-color: #216d37;}
+	.rodape .rodapeConteudo .newsletter button {width: 15%; padding: 0; height: 30px; float: left; border-radius: 0; background-color: #1a5b2d; color: #fff; }
+	.rodape .rodapeConteudo .menuSocial {float: right; margin-top: 10px;}
+	.rodape .rodapeConteudo .menuSocial li {display: inline-block; margin: 0 7.5px;}
+	.rodape .rodapeConteudo .assinaturaAG3 {position: absolute; bottom: 10px; right: 25px;}
+
+
+/*HOME*/
+
+	/*Apresentação site*/
+	.apresentacao {background-color: #f2f3f3; position: relative; float: left; width: 100%; padding-top: 70px; padding-bottom: 25px;}
+	.apresentacao .item {min-height: 130px; padding-left: 90px; margin-bottom: 25px;}
+	.apresentacao .item i {font-size: 60px; position: absolute; color: #3fa551; left: 10px; top: 0px;}
+	.apresentacao .item h2 {color: #57595a; font-size: 20px; font-weight: 600; margin-bottom: 10px;}
+	.apresentacao .item p {color: #57595a; max-width: 275px;}
+
+	/*Mural*/
+	.mural {position: relative; padding-top: 75px; float: left; width: 100%; height: 500px; background: url(../img/home/piscina-noticias.jpg) no-repeat center; background-size: cover; }
+	.mural h2 {color: #fff; font-size: 28px; text-align: center; margin-bottom: 30px;}
+	.mural .noticia, .mural .aviso {height: 120px; padding: 0; background-color: rgba(64,155,76, .7); margin-bottom: 35px; border-radius: 25px;}
+	.mural .noticia .data, .mural .aviso .data {background-color: rgb(64,155,76); float: left; margin-right: 20px; padding-top: 25px; height: 100%; width: 100px; border-radius: 25px;}
+	.mural .noticia .data p, .mural .aviso .data p {text-align: center; color: #fff; font-size: 24px;}
+	.mural .noticia .texto, .mural .aviso .texto {color: #fff; padding-top: 15px; padding-right: 20px;}
+	.mural .noticia .texto span, .mural .aviso .texto span {font-weight: 600;}
+	.mural .noticia .texto p, .mural .aviso .texto p {font-weight: 300;}
+
+
+/*AVISOS*/
+	.calendario {position: relative; float: left; width: 100%; background-color: #f2f3f3; padding-bottom: 50px;}
+	.calendario .titulo {width: 100%; height: 60px; background-color: #80b97e; padding-top: 13px; margin-bottom: 60px;}
+	.calendario .titulo h1 {color: #fff; text-align: center; font-size: 28px;}
+
+	.calendario .controlador {height: 50px; width: 362px; border-radius: 25px;}
+	.calendario .setaEsquerda {width: 50px; margin-right: -2px; float: left; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background-color: #fff; border: 1px solid #80b97e; border-right: none; color: #80b97e;  outline: none;}
+	.calendario .setaDireita {width: 50px; margin-left: -2px; float: left; border-top-right-radius: 15px; border-bottom-right-radius: 15px; background-color: #fff; border: 1px solid #80b97e; border-left: none; color: #80b97e; outline: none;}
+	.calendario .meio {width: 266px; cursor: default; float: left; font-size: 20px; font-weight: 600; padding: 6.5px 0; background-color: #fff; border: 1px solid #80b97e; border-right: none; border-left: none; color: #80b97e; outline: none;}
+	.calendario .setaEsquerda:focus {outline: none;}
+	.calendario .setaDireita:focus {outline: none;}
+	.calendario .meio:focus {outline: none;}
+
+	.day-headers .day.header {width: 13.4% !important; border-radius: 12px; font-size: 18px; padding-top: 4px; margin: 0; margin-left: 0.885714284%; height: 35px; background-color: #6cab68; color: #fff;}
+	.responsive-calendar .day a {background-color: #aecfa9 !important; border-radius: 20px;}
+	.responsive-calendar .day.active a {background-color: #508f4b !important;}
+	.responsive-calendar .day.not-current a {color: #aecfa9 !important;}
+	.responsive-calendar .badge {background-color: #E46653;}
+
+	.btnPiscina {margin-right: 5px !important; width: 48%; margin-top: -55px; margin-bottom: 50px !important;}
+
+	.blocoAvisos {margin-top: 20px;}
+
+	#inputModalidade {height: 20px; margin-left: 10px; margin-right: 10px; width: 20px;}
+
+
+/*BOLETOS*/
+	.divBoletos {position: relative; float: left; width: 100%; background-color: #f2f3f3; padding-bottom: 100px;}
+	.divBoletos .faixa {width: 100%; height: 60px; background-color: #80b97e; padding-top: 13px; margin-bottom: 60px;}
+	.divBoletos .faixa h1 {color: #fff; text-align: center; font-size: 28px;}
+
+	.divBoletos .tabela {width: 100%;}
+	.divBoletos .tabela .linha {height: 45px; padding: 5px 0;}
+	.divBoletos .tabela .linha .coluna {height: 35px; padding: 0 10px;}
+	.divBoletos .tabela .linha .coluna .celula {border: 1px solid #80b77d; color: rgb(90,90,90); text-align: center; height: 100%; width: 100%; padding-top: 7px;}
+	/*formatação verde*/
+	.divBoletos .tabela .primeiraLinha .coluna .celula {background-color: #80b77d; color: #fff;}
+	.divBoletos .tabela .linha .coluna .celulaVerde {background-color: #80b77d; color: #fff;}
+	.divBoletos .tabela .linha .coluna .celulaVerde:hover {background-color: rgb(108,165,106);}
+
+	span.rs {position: absolute; left: 28%;}
+
+	.valor {width: 23% !important; float: right !important;}
+	.control-label p.virgula {width: 2%; float: right; padding-top: 10px; margin-left: 3px;}
+
+	span.rsBoleto {position: absolute; left: 47%; margin-top: 10px;}
+
+
+/*MENSAGENS*/
+	.divMensagens {position: relative; float: left; width: 100%; background-color: #f2f3f3; padding-bottom: 90px;}
+	.divMensagens .faixa {width: 100%; height: 60px; background-color: #80b97e; padding-top: 13px; margin-bottom: 60px;}
+	.divMensagens .faixa h1 {color: #fff; text-align: center; font-size: 28px;}
+
+	.divMensagens .container {max-width: 1000px;}
+	.divMensagens .tabela {border: 1px solid #80b97e; width: 100%; position: relative; float: left;}
+	.divMensagens .tabela .botoesTabela {border-right: 1px solid #80b97e; height: 100%; padding: 15px; padding-top: 49px; margin-right: -1px; /*pra nao ficar grossa a listrinha do meio*/ }
+	.divMensagens .tabela .botoesTabela .celulaVerde {cursor: pointer;}
+	.divMensagens .tabela .blocoMensagens {border-left: 1px solid #80b97e; height: 100%; padding: 15px;}
+	.divMensagens .tabela .blocoMensagens h2 {padding-left: 10px; color: #80b77d; font-size: 18px; margin-bottom: 10px;}
+
+	.divMensagens .tabela .linha {height: auto; padding: 5px 0; float: left; width: 100%; position: relative;}
+	.divMensagens .tabela .linha.primeiraLinha {cursor: default;}
+	.divMensagens .tabela .linha .coluna {padding: 0 10px;}
+	.divMensagens .tabela .linha .coluna .celula {border: 1px solid #80b77d; color: rgb(90,90,90); text-align: center; height: 100%; width: 100%; padding-top: 5px; padding-bottom: 5px;}
+	/*formatação verde*/
+	.divMensagens .tabela .primeiraLinha .coluna .celula {background-color: #80b77d; color: #fff; }
+	.divMensagens .botoesTabela .celulaVerde {background-color: #80b77d; color: #fff; text-align: center; margin-bottom: 10px; height: 35px; padding-top: 7px;}
+	.divMensagens .botoesTabela .celulaVerde:hover {background-color: rgb(108,165,106);}
+
+	/*modal nova mensagem*/
+	#novaMensagemModal .modal-header {background-color: #80b77d; }
+	#novaMensagemModal .modal-header .close {color: #fff;}
+	#novaMensagemModal .modal-title {text-align: center; color: #fff;}
+	#novaMensagemModal .botaoEnviar {background-color: #80b77d; color: #fff;}
+	#novaMensagemModal .form-group label {color: rgb(90,90,90);}
+	#novaMensagemModal .form-group select:focus,
+	#novaMensagemModal .form-group textarea:focus,
+	#novaMensagemModal .form-group input:focus {border: 2px solid #80b77d;}
+
+	/*modal ler mensagem*/
+	#lerMensagemModal .modal-title {text-align: center; color: #80b77d; font-size: 24px;}
+	#lerMensagemModal h5 {color: rgb(50,50,50); font-size: 18px; margin-bottom: 15px;}
+	#lerMensagemModal h5 span {font-style: italic;}
+	#lerMensagemModal p {margin-bottom: 10px;}
+
+
+/*NOTICIAS*/
+	.divNoticias {position: relative; float: left; width: 100%; background-color: #f2f3f3; }
+	.divNoticias .faixa {width: 100%; height: 60px; background-color: #80b97e; padding-top: 13px; margin-bottom: 60px;}
+	.divNoticias .faixa h1 {color: #fff; text-align: center; font-size: 28px;}
+
+	.divNoticias .bloco {height: 330px; margin-bottom: 100px;}
+	.divNoticias .bloco .data {width: 23%; height: 280px; font-size: 18px; color: #fff; padding-top: 50px; text-align: center; margin: 0 0.5%; float: left; background-color: #80b97e;}
+	.divNoticias .bloco .conteudo {width: 75%; margin: 0 0.5%; height: 280px; float: left; border: 1px solid #80b97e;}
+	.divNoticias .bloco .conteudo .titulo {background-color: #6cab68; min-height: 50px; width: 100%; padding-top: 7px; padding-left: 10px; padding-bottom: 7px; }
+	.divNoticias .bloco .conteudo .titulo h2 {font-size: 20px; color: #fff;}
+	.divNoticias .bloco .conteudo .texto {padding: 10px;}
+	.divNoticias .bloco .conteudo .texto p {font-size: 14px; color: rgb(90,90,90);}
+	.divNoticias .bloco button {float: right; margin-right: 0.5%; font-size: 18px; transition: 0.4s; padding-top: 6px; height: 40px; margin-top: 10px; width: 140px; border-radius: 0; background-color: transparent; border: 1px solid #80b97e; color: #80b97e;}
+
+
+
+
+/*NOTÍCIA ABERTA*/
+	.divNoticia {position: relative; float: left; width: 100%; background-color: #f2f3f3; padding: 60px 0;}
+	.divNoticia h2 {font-size: 28px; color: rgb(90,90,90); text-align: center; font-weight: 600; margin-bottom: 30px;}
+	.divNoticia p {color: rgb(90,90,90); margin-bottom: 15px; }
+	.divNoticia img {width: auto; margin: 0 10%;}
+
+
+
+/* CADASTRAR */
+	.well {background-color: #fff; margin-top: 20px;}
+	.goBack {margin-bottom: 10px;}
+
+	/*div.signup-wall .formCadastrarListando select {border-color: #6cab68; color: #6cab68; box-shadow: 8px 10px 15px #cecece; margin-left: 3%;}*/
+	div.signup-wall .formCadastrarListando input {border-color: #2c7d3d; color: #2c7d3d; box-shadow: 8px 10px 15px #cecece; margin-left: 3%;}
+	div.signup-wall .formCadastrarListando input.form-gran-rua {width: 60%; float: left; margin-right: 4%;}
+	div.signup-wall .formCadastrarListando input.form-gran-numero {width: 33%;}
+	div.signup-wall .formCadastrarListando .form-control {width: 97%;}
+	div.signup-wall .formCadastrarListando .labelFormCadastrar {color: #2c7d3d;}
+	div.signup-wall .formCadastrarListando .telefone {width: 80%; float: right; margin-bottom: 7px; margin-left: -10px;}
+	div.signup-wall .formCadastrarListando label.meioContato {margin-top: 50px; width: 20%;}
+	div.signup-wall .formCadastrarListando .senha {margin-top: 75px;}
+
+
+	div.signup-wall .formCadastrarListando .depedentes {margin-bottom: 70px;}
+	div.signup-wall .formCadastrarListando .depedentes .field_wrapper div a.add_button img {margin-top: 66px; height: 25px; width: 25px; margin-left: 35px;}
+	div.signup-wall .formCadastrarListando .depedentes .field_wrapper div a.remove_button img {margin-top: 160px; height: 25px; width: 25px; margin-left: 35px;}
+
+	.btn-gran {background-color: #6cab68; border: none; margin-bottom: 10px; margin-right: 18px; color: #fff;}
+	.btn-gran:hover {background-color: #2c7d3d; color: #fff;}
+
+	.cancelarModal {margin-right: 10px;}
+
+	.divCadastrar {margin-top: 35px; margin-bottom: 35px;}
+	.divCadastrar .login-title {color: #2c7d3d; margin-bottom: 7px;}
+	.listaCondominos {padding-top: 320px; margin-bottom: 10px;}
+
+	.listaTopoCadastrado {padding-top: 322px;}
+	.listaCadastradoTopo {text-align: center;}
+	.listaCadastradoTopo a {margin-top: 50px; font-size: 18px;}
+
+
+	.pagination>.disabled>span, .pagination>.disabled>span:hover, .pagination>.disabled>span:focus, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus {background-color: #2c7d3d !important;}
+	.pagination>li>a, .pagination>li>span {background-color: #2c7d3d !important;}
+	.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {background-color: #fff !important; color: #000 !important;}
+	.dataTables_filter {float: right;}
+
+	.login {position: absolute; top: 120px; background-color: rgba(0,0,0,0.8);}
+	.fundoLogin {background: url(../img/home/login.jpg) center; width: 100%; height: 100%; background-size: cover;}
+
+	.conteudoNoticias a:hover {text-decoration: none;}
+
+	.hoverIndex a:hover {text-decoration: none;}
+
+
+	.dataTables_filter label {margin-bottom: 15px;}
+	.dataTables_filter .form-control {margin-left: 10px !important;}
+
+
+	.mensalidadeIndividual .rsMensalida {float: left; margin-top: 7px; margin-right: 20px; margin-left: 35px;}
+	.mensalidadeIndividual .valorMensalidade {width: 30%; float: left;}
+
+	.mensalidadeIndividual .virgulaMensalidade {float: left; width: 4%; margin-left: 15px;}
+
+	.nomePaiDependente {margin-left: 25px;}
+
+	.btn-imprimir {background-color: #6cab68; margin-bottom: 50px; border: none; color: #fff; margin-right: 20px;}
+	.btn-imprimir:hover {background-color: #2c7d3d; color: #fff;}
+
+/* DOCUMENTOS */
+
+	.faixa-granVerde {background-color: #6cab68; text-align: center; padding-top: 5px; margin-bottom: 10px; margin-right: 10px;  border-radius: 5px; height: 120px;}
+	.faixa-granVerde a {color: #fff;}
+	.faixa-granVerde:hover {color: #fff; background-color: #216D37;}
+	.faixa-granBlue {background-color: #216D37; height: 50px; text-align: center; padding-top: 15px; margin-bottom: 10px; color: #fff; border-radius: 5px; margin-bottom: 10px;}
+	.faixa-granBlue:hover {color: #fff; background-color: #6cab68;}
+	.faixa-granRed {background-color: rgb(231,76,60); height: 50px; text-align: center; padding-top: 12px; margin-bottom: 10px; color: #fff; border-radius: 5px; cursor: pointer;}
+	.faixa-granRed:hover {color: #fff; background-color: rgb(210,60,60);}
+
+	/*Modal*/
+		.cadastrarNome {margin-top: 30px; margin-right: 5px;}
+
+	.linkDocumento {text-align: center; margin-top: 20px;}
+
+	/*ATAS*/
+	.pdfAtasResp {margin-bottom: 10px;}
+	.pdfAtas {text-align: center; font-size: 18px; padding-bottom: 10px; text-transform: lowercase;}
+	.pdfAtas img {width: 100px; height: 100px; margin-bottom: 10px; margin-left: 30%;}
+
+
+/*RESERVAS*/
+	.reservas .barraDePesquisa {margin-bottom: 10px; border: 1px solid #216D37; box-shadow: 8px 10px 10px #cecece; height: 30px; padding-right: 32px;}
+	.reservas button.lupazinha {position: absolute; right: 16px; top: 1px; height: 28px; width: 27px; border: none; background-color: #6cab68;}
+
+	.reservas .btnReservar {text-align: center;}
+
+	.divNoticias .bloco button {width: 100%;}
+
+	.nomeParticipante {height: 45px; padding: 10px 15px; font-size: 15px; line-height: 1.42857143; color: #2c3e50; background-color: #ffffff; background-image: none; border: 1px solid #dce4ec; border-radius: 4px; margin-bottom: 5px;}
+
+	.addButton img {width: 30px;}
+
+	.numeroParticipante .add_button img {margin-top: 40px !important;}
+	.numeroParticipante .remove_button img {margin-top: 73px !important;}
+
+	.regrasReservas ul {margin-top: 10px; margin-bottom: 50px;}
+	.regrasReservas h3 {color: #216D37;}
+	.bolinhaRegras {width: 10px; height: 10px; background-color: #216D37; border-radius: 8px; float: left; margin-top: 7px; margin-left: 20px; margin-right: 5px;}
+
+
+	.listaRegras .expirado {background-color: #008000 !important;}
+
+	.escolhaModalidade {text-align: center; height: 25px; background-color: #6cab68; color: #fff; margin-bottom: 35px; cursor: pointer;}
+	.escolhaModalidade:hover .linhaActiveModalidade {border-bottom: 4px solid #008000; width: 100%; margin-top: 3px;}
+	/*.activeModalidade {background: url(../img/home/seta-para-baixo.png); background-size: cover; width: 32px; height: 10px; margin: 0 auto;}*/
+	.escolhaModalidade:hover .activeModalidade {border-top: 5px solid #008000; border-left: 10px solid transparent; border-right: 10px solid transparent; margin: 0 10px; float:left; margin-left: 48%;}
+
+	.bloco.col-md-3 .conteudo .texto p {color: red;}
+	.bloco.col-md-3 .conteudo .texto h3 {color: red;}
+	.bloco.col-md-3 .conteudo .texto a:hover {color: red; outline: none;}
+
+
+/*Color algumas ROW*/
+	.deuRuimColor {background-color: #f2f3f3;}
+
+
+@media screen and (max-width: 767px) {
+
+	.navbar-right {width: 100%; margin: 0;}
+	.navbar-right li {width: 100%; min-height: 50px; margin: 0 auto;}
+	.navbar-right li a {padding-top: 17px; min-height: 50px; margin-top: 0; color: #fff !important;}
+
+	.navbar {background-color: transparent;}
+	.navbar-inverse .navbar-collapse {border: none;}
+	.navbar-collapse {background-color: rgba(11,84,36,.85);}
+
+}
+
+  /*  */
+
+
+
+
+@charset "utf-8";
+/* CSS Document */
+
+/* ---------- FONTAWESOME ---------- */
+/* ---------- http://fortawesome.github.com/Font-Awesome/ ---------- */
+/* ---------- http://weloveiconfonts.com/ ---------- */
+
+/* ---------- GENERAL ---------- */
+
+.calendarEnglobandoTudo body {
+	background: #f9f9f9;
+	color: #0e171c;
+	font: 300 100%/1.5em 'Lato', sans-serif;
+}
+
+.calendarEnglobandoTudo a {
+	text-decoration: none;
+}
+
+.calendarEnglobandoTudo h2 {
+	font-size: 2em;
+	line-height: 1.25em;
+	margin: .25em 0;
+}
+
+.calendarEnglobandoTudo h3 {
+	font-size: 1.5em;
+	line-height: 1em;
+	margin: .33em 0;
+}
+
+.calendarEnglobandoTudo table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.calendarEnglobandoTudo .container {
+	height: 538px;
+	left: 50%;
+	margin: 0 0 0 -245px;
+	position: relative;
+	top: 50%;
+	width: 510px;
+}
+
+/* ---------- CALENDAR ---------- */
+
+.calendarEnglobandoTudo .calendar {
+	text-align: center;
+}
+
+.calendarEnglobandoTudo .calendar header {
+	position: relative;
+	width: 420px;
+}
+
+.calendarEnglobandoTudo .calendar h2 {
+	text-transform: uppercase;
+}
+
+.calendarEnglobandoTudo .calendar thead {
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.calendarEnglobandoTudo .calendar tbody {
+	color: #7c8a95;
+}
+
+.calendarEnglobandoTudo .calendar tbody td:hover {
+	border: 2px solid #00addf;
+}
+
+.calendarEnglobandoTudo .calendar td {
+	border: 2px solid transparent;
+	border-radius: 50%;
+	display: inline-block;
+	height: 4em;
+	line-height: 4em;
+	text-align: center;
+	width: 4em;
+}
+
+.calendarEnglobandoTudo .calendar .prev-month,
+.calendarEnglobandoTudo .calendar .next-month {
+	color: #cbd1d2;
+}
+
+.calendarEnglobandoTudo .calendar .prev-month:hover,
+.calendarEnglobandoTudo .calendar .next-month:hover {
+	border: 2px solid #cbd1d2;
+}
+
+.calendarEnglobandoTudo .current-day {
+	background: #00addf;
+	color: #f9f9f9;
+}
+
+.calendarEnglobandoTudo .event {
+	cursor: pointer;
+	position: relative;
+}
+
+.calendarEnglobandoTudo .event:after {
+	background: #00addf;
+	border-radius: 50%;
+	bottom: .5em;
+	display: block;
+	content: '';
+	height: .5em;
+	left: 50%;
+	margin: -.25em 0 0 -.25em;
+	position: absolute;
+	width: .5em;
+}
+
+.calendarEnglobandoTudo .event.current-day:after {
+	background: #f9f9f9;
+}
+
+.calendarEnglobandoTudo .btn-prev,
+.calendarEnglobandoTudo .btn-next {
+	border: 2px solid #cbd1d2;
+	border-radius: 50%;
+	color: #cbd1d2;
+	height: 2em;
+	font-size: .75em;
+	line-height: 2em;
+	margin: -1em;
+	position: absolute;
+	top: 50%;
+	width: 2em;
+}
+
+.calendarEnglobandoTudo .btn-prev:hover,
+.calendarEnglobandoTudo .btn-next:hover {
+	background: #cbd1d2;
+	color: #f9f9f9;
+}
+
+.calendarEnglobandoTudo .btn-prev {
+	left: 6em;
+}
+
+.calendarEnglobandoTudo .btn-next {
+	right: 6em;
+}
+
+
+
+/* ARRUMANDO RESPONSIVO NOVA ATUALIZAÇÃO 01/06/2018 */
+@media screen and (max-width: 580px) {
+	.atasResponsivo .faixa-gran {width: auto; float: none; height: 110px;}
+	.divNoticias .faixa {height: auto;}
+}
+@media screen and (max-width: 950px) {
+	.mural {height: auto;}
+	.navbar-header {width: 15%;}
+	.navbar-header img {width: 100%; margin-top: 15px;}
+}
+@media screen and (max-width: 850px) {
+	#myNavbar ul li {font-size: 13px}
+}
+
+@media screen and (max-width: 768px) {
+	.navbar-header {width: auto;}
+	.navbar-header img {width: auto; margin-top: 0;}
+	#myNavbar ul li {font-size: 13px}
+}
+@media screen and (max-width: 475px) {
+	.enviadasassunto {width: 41.66666667%;}
+	.enviadasver {width: 25%;}
+	.enviadasdata {display: none;}
+	.enviadaspara {display: none;}
+}
+
+@media screen and (max-width: 630px) {
+	.mensagens .enviadasassunto {width: 41.66666667%;}
+	.mensagens .enviadasver {width: 18%;}
+	.mensagens .enviadasresponder {width: 32%;}
+	.mensagens .enviadasdata {display: none;}
+	.mensagens .enviadaspara {display: none;}
+}
+

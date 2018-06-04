@@ -1,0 +1,12 @@
+extends ../layout
+	
+block content
+	main.home
+		section.fotoTopo.row
+			.container
+				p Olá #{user.nome}!
+
+		p Aqui vai o calendario
+		
+
+	script(src='node-calendar.js')

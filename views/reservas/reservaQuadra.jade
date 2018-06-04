@@ -1,0 +1,2510 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias.reservas
+			.faixa
+				h1 Reservas Quadra Society
+			.container
+				//- .row
+				//- 	form.form-group.col-md-10.pull-right(action='/reservas/reservasFiltrada' method='POST')
+				//- 		input.barraDePesquisa.pull-right.col-md-3.control-label(type='date', name='data')
+				//- 		button.lupazinha.pull-right
+				//- 			img(src='/img/home/lupaPesquisa.png' width='100%')
+			//- .container
+			//- 	.row
+			//- 		.col-md-8.regrasReservas
+			//- 			h3 Regras para fazer a sua reserva:
+			//- 			ul
+			//- 				.bolinhaRegras
+			//- 				li Verificar dias e horários, para qua não haja reservas em um dia já escolhido.
+			.container
+				.row
+					a(href='/reservas')
+						.col-md-6.escolhaModalidade
+							p Salão de Festa
+							.linhaActiveModalidade
+							.activeModalidade
+					a(href='/reservas/reservaQuadra')
+						.col-md-6.escolhaModalidade
+							p Quadra Society
+							.linhaActiveModalidade
+							.activeModalidade
+			.container
+				.row.listaRegras
+					//- each lista, i in listaReservas
+					//- 	if (moment(lista.data).format('MMM') == moment(dataAtual).format('MMM'))							
+					//- 		.bloco.col-md-3
+					//-			if (moment(lista.data).format('DD') < moment(dataAtual).format('DD') && moment(lista.data).format('MMM') <= moment(dataAtual).format('MMM'))
+					//- 				.data
+					//- 					p #{moment(lista.data).format('DD')}
+					//- 					p #{moment(lista.data).format('MMM')}
+					//- 				.conteudo
+					//- 					.titulo
+					//- 						h2 Reserva Encerrada
+					//- 					.texto
+					//- 						- var modalidade = lista.modalidade
+					//- 						if (modalidade == "Salão de Festa")
+					//- 							p reservado por #{lista.nomeUser}.
+					//- 						else 
+					//- 							p reservado por #{lista.nomeUser} às #{lista.horaInicio}.
+					//- 			else
+					//- 				.data.expirado
+					//- 					p #{moment(lista.data).format('DD')}
+					//- 					p #{moment(lista.data).format('MMM')}
+					//- 				.conteudo
+					//- 					.titulo.expirado
+					//- 						h2 #{lista.modalidade}
+					//- 					.texto
+					//- 						- var modalidade = lista.modalidade
+					//- 						if (modalidade == "Salão de Festa")
+					//- 							p reservado por #{lista.nomeUser}.
+					//- 						else
+					//- 							each lista, i in listaReservasData
+					//- 								p reservado por #{lista.nomeUser} às #{lista.horaInicio}.
+					//- 				a(href='#' data-toggle='modal', data-target='#reserva')
+					//- 					button.btn Reserve outro horário
+					- var x = 1
+					- var dataCompleta = moment(dataAtual).format('MM-DD-YYYY')
+					- var mes = moment(dataAtual).format('MM')
+					- var ano = moment(dataAtual).format('YYYY')
+					- var horaAtual = moment(dataAtual).format('HH')
+					- var minutoAtual = moment(dataAtual).format('mm')
+					- var horaMinutoAtual = horaAtual+':'+minutoAtual
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva1
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													//- input#inputHora1.form-control(type='time' name='horaInicio' min='08:00' max='22:00' onchange='testeFunction1()' required)
+													select.form-control#inputHora1(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+
+											.form-group#horaTermino1
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva2
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													//- input#inputHora2.form-control(type='time' name='horaInicio' min='08:00' max='22:00' onchange='testeFunction2()' required)
+													select.form-control#inputHora2(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva3
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													//- input#inputHora3.form-control(type='time' name='horaInicio' min='08:00' max='22:00' onchange='testeFunction3()' required)
+													select.form-control#inputHora3(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva4
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora4(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva5
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora5(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva6
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora6(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva7
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora7(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva8
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora8(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p 0#{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva9
+										- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+0+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-0#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control 0#{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora9(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva10
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora10(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva11
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora11(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva12
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora12(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva13
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora13(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva14
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora14(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva15
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora15(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar 
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva16
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora16(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva17
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora17(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva18
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora18(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+					
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva19
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora19(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva20
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora20(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva21
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora21(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva22
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora22(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva23
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora23(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva24
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora24(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva25
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora25(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva26
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora26(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva27
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora27(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva28
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora28(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva29
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora29(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva30
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora30(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar
+
+					- x++
+						.bloco.col-md-3
+							.data
+								p #{x}
+								p #{moment(dataAtual).format('MMM')}
+							.conteudo
+								.titulo
+									h2 Quadra Society
+								.texto
+									each lista, i in reserva31
+										- var datacompletadaxs = mes+'-'+x+'-'+ano
+										if (datacompletadaxs > dataCompleta)
+											p #{lista.nomeUser}: #{lista.horaInicio}
+										else
+											if (datacompletadaxs == dataCompleta)
+												if (horaMinutoAtual < lista.horaInicio)
+													p #{lista.nomeUser}: #{lista.horaInicio}
+							- var datacompletadaxs = mes+'-'+x+'-'+ano
+							if (datacompletadaxs >= dataCompleta)	
+								a(href='#' data-toggle='modal', data-target='#reserva#{x}')
+									button.btn Reserve outro horário
+						.modal.fade(role='dialog', id='reserva#{x}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Reservar
+									.modal-body
+										form.form-horizontal(method='post' action="/reservas/reservaHorarioQuadra", entype='multipart/form-data')
+											.form-group
+												input(type='hidden' name='idUser' value='#{user._id}')
+												input(type='hidden' name='nomeUser' value='#{user.nome}')
+												input(type='hidden' name='data' value='#{ano}-#{mes}-#{x}')
+											.form-group#modalidade
+												label.col-md-3.control-label(for='inputData') Modalidade
+												.col-md-8
+													select.form-control(name='modalidade' id="myModalidade" onchange="myFunction()")
+														option(value='Quadra Society') Quadra Society												
+											.form-group#dataInicio
+												label.col-md-3.control-label(for='inputData') Data
+												.col-md-8
+													P#inputData.form-control #{x}/#{mes}/#{ano}
+											.form-group#horaInicio
+												label(for='inputData').col-md-3.control-label Hora Inicio
+												.col-md-8
+													select.form-control#inputHora31(name='horaInicio')
+														option(value='08:00') 08:00
+														option(value='09:00') 09:00
+														option(value='10:00') 10:00
+														option(value='11:00') 11:00
+														option(value='12:00') 12:00
+														option(value='13:00') 13:00
+														option(value='14:00') 14:00
+														option(value='15:00') 15:00
+														option(value='16:00') 16:00
+														option(value='17:00') 17:00
+														option(value='18:00') 18:00
+														option(value='19:00') 19:00
+														option(value='20:00') 20:00
+														option(value='21:00') 21:00
+														option(value='22:00') 22:00
+											.form-group#horaTermino
+											br
+											br
+
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											button.btn.btn-primary.confirmaModal(type='submit') Reservar	
+
+
+				.row.btnReservar
+					- var usuario = user.tipoConta
+					if (usuario == 'administrador' || "portaria")
+						a(href='/reservas/listaReservasQuadra')
+							button.btn.btn-gran.btn-primary
+								p Lista de Reservas
+					//- a(data-toggle='modal', data-target='#reserva' href='#')
+					//- 	button.btn.btn-gran.btn-primary
+					//- 		p Reservar
+		.container
+			.row
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')		
+		script(src='/jquery/mask.min.js')
+		script.
+			function myFunction() {
+			    var x = document.getElementById("myModalidade").value;
+			    if (x == "Salão de Festa"){
+			    	$( "#horaInicio" ).html("<div></div>");
+			    } else {
+			    	$( "#horaInicio" ).html("<label class='col-md-3 control-label' for='inputData'>Hora Inicio</label><div class='col-md-8'><input id='inputHora' class='form-control' type='time' name='horaInicio' min='08:00' max='22:00' onchange='testeFunction()' required/></div>");
+			    }
+			}
+			function testeFunction1() {
+				var x = document.getElementById("inputHora1").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora1").value = '';
+				}
+			}
+			function testeFunction2() {
+				var x = document.getElementById("inputHora2").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora2").value = '';
+				}
+			}
+			function testeFunction3() {
+				var x = document.getElementById("inputHora3").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora3").value = '';
+				}
+			}
+			function testeFunction4() {
+				var x = document.getElementById("inputHora4").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora4").value = '';
+				}
+			}
+			function testeFunction5() {
+				var x = document.getElementById("inputHora5").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora5").value = '';
+				}
+			}
+			function testeFunction6() {
+				var x = document.getElementById("inputHora6").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora6").value = '';
+				}
+			}
+			function testeFunction7() {
+				var x = document.getElementById("inputHora7").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora7").value = '';
+				}
+			}
+			function testeFunction8() {
+				var x = document.getElementById("inputHora8").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora8").value = '';
+				}
+			}
+			function testeFunction9() {
+				var x = document.getElementById("inputHora9").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora9").value = '';
+				}
+			}
+			function testeFunction10() {
+				var x = document.getElementById("inputHora10").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora10").value = '';
+				}
+			}
+			function testeFunction11() {
+				var x = document.getElementById("inputHora11").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora11").value = '';
+				}
+			}
+			function testeFunction12() {
+				var x = document.getElementById("inputHora12").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora12").value = '';
+				}
+			}
+			function testeFunction13() {
+				var x = document.getElementById("inputHora13").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora13").value = '';
+				}
+			}
+			function testeFunction14() {
+				var x = document.getElementById("inputHora14").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora14").value = '';
+				}
+			}
+			function testeFunction15() {
+				var x = document.getElementById("inputHora15").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora15").value = '';
+				}
+			}
+			function testeFunction16() {
+				var x = document.getElementById("inputHora16").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora16").value = '';
+				}
+			}
+			function testeFunction17() {
+				var x = document.getElementById("inputHora17").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora17").value = '';
+				}
+			}
+			function testeFunction18() {
+				var x = document.getElementById("inputHora18").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora18").value = '';
+				}
+			}
+			function testeFunction19() {
+				var x = document.getElementById("inputHora19").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora19").value = '';
+				}
+			}
+			function testeFunction20() {
+				var x = document.getElementById("inputHora20").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora20").value = '';
+				}
+			}
+			function testeFunction21() {
+				var x = document.getElementById("inputHora21").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora21").value = '';
+				}
+			}
+			function testeFunction22() {
+				var x = document.getElementById("inputHora22").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora22").value = '';
+				}
+			}
+			function testeFunction23() {
+				var x = document.getElementById("inputHora23").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora23").value = '';
+				}
+			}
+			function testeFunction24() {
+				var x = document.getElementById("inputHora24").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora24").value = '';
+				}
+			}
+			function testeFunction25() {
+				var x = document.getElementById("inputHora25").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora25").value = '';
+				}
+			}
+			function testeFunction26() {
+				var x = document.getElementById("inputHora26").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora26").value = '';
+				}
+			}
+			function testeFunction27() {
+				var x = document.getElementById("inputHora27").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora27").value = '';
+				}
+			}
+			function testeFunction28() {
+				var x = document.getElementById("inputHora28").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora28").value = '';
+				}
+			}
+			function testeFunction29() {
+				var x = document.getElementById("inputHora29").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora29").value = '';
+				}
+			}
+			function testeFunction30() {
+				var x = document.getElementById("inputHora30").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora30").value = '';
+				}
+			}
+			function testeFunction31() {
+				var x = document.getElementById("inputHora31").value;
+				if (x < "08:00" || x > "23:00"){
+					alert("Horário de "+x+" não está disponível, favor escolher à parti das 08:00 até 22:00" );
+					document.getElementById("inputHora31").value = '';
+				}
+			}
+			//- window.onload = function() {
+			//-     var select = document.getElementById("dias");
+			//-     var options = getDiasMes(12, 2016);
+			//- 	for (var i = 0; i < options.length; i++) {
+			//-         var opt = options[i];
+			//-         var el = document.createElement("option");
+			//-         el.textContent = opt;
+			//-         el.value = opt;
+			//-         select.appendChild(el);
+			//-     }
+			//- }
+
+			//- function getDiasMes(month, year) {
+			//-      month--;
+
+			//-      var date = new Date(year, month, 1);
+			//-      var days = [];
+			//-      while (date.getMonth() === month) {
+			//-         days.push(date.getDate());
+			//-         date.setDate(date.getDate() + 1);
+			//-      }
+			//-      return days;
+			//- }
+
+		//- 	.form-group
+		//- 										div.depedentes
+		//- 											label(class='labelFormCadastrar col-md-3') Convidados
+		//- 											input(type='text', name='numeroParticipantes', class='col-md-7 telefone nomeParticipante', id='numeroDedependente' placeholder='Quantos membros de fora participaram?', value='', required)
+		//- 											br
+		//- 											br
+		//- 											br
+		//- 											.field_wrapper
+		//- 												div
+		//- 													a.add_button.col-md-3.addButton(href='javascript:void(0);', title='Add field')
+		//- 														img(src='/img/home/buttonMais.png')
+		//- 													input(type='text', name='nomeParticipante', class='col-md-7 telefone nomeParticipante', id='numeroDedependente' placeholder='Nome do Participante', required)
+		//- script.
+		//- 	$(document).ready(function(){
+		//- 		var maxField = 100; //Input fields increment limitation
+		//- 		var addButton = $('.add_button'); //Add button selector
+		//- 		var wrapper = $('.field_wrapper'); //Input field wrapper
+		//- 		var fieldHTML = '<div><a href="javascript:void(0);" class="addButton remove_button col-md-3" title="Remove field"><img src="/img/home/buttonMenos.png" /></a><input type="text" name="nomeParticipante" class="col-md-7 telefone nomeParticipante" placeholder="Nome do Dependente" /></div>'; //New input field html 
+		//- 		var x = 1; //Initial field counter is 1
+		//- 		$(addButton).click(function(){ //Once add button is clicked
+		//- 			if(x < maxField){ //Check maximum number of input fields
+		//- 				x++; //Increment field counter
+		//- 				$(wrapper).append(fieldHTML); // Add field html
+		//- 			}
+		//- 		});
+		//- 		$(wrapper).on('click', '.remove_button', function(e){ //Once remove button is clicked
+		//- 			e.preventDefault();
+		//- 			$(this).parent('div').remove(); //Remove field html
+		//- 			x--; //Decrement field counter
+		//- 		});
+		//- 	});

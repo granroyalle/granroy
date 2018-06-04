@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		div
+			div.row
+				div.col-sm-6.col-md-4.col-md-offset-4.divCadastrar
+					h1.text-center.login-title Editar Mensalidade individual Associado
+					hr
+					div.signup-wall.mensalidadeIndividual
+						form(class='form-signin', action='/usuario/editarMensalidadeIndividual/#{valorUsuario._id}', method='POST')
+							label Nome 
+							p #{valorUsuario.nome}
+							label Mensalidade &nbsp &nbsp &nbsp R$ &nbsp &nbsp
+							span.money#money  #{valorUsuario.mensalidade}
+							br
+							span.rsMensalida R$
+							input(type='text', name='valor1', class='form-control valorMensalidade', required)
+							p.virgulaMensalidade ,
+							input(type='text', name='valor2', class='form-control valorMensalidade', required)
+							br
+							hr
+							label.control-label(for='inputDataVencimento') Data vencimento
+							input(type='date', name='dataVencimento', class='form-control', required)
+							hr
+							button(class='btn btn-lg btn-primary btn-block', type='submit') Editar
+							span.clearfix
+							a(href='/usuario/listaUsuarios', class='btn btn-link btn-block', type='submit') Cancelar
+							span.clearfix
+		.container
+			.row
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+
+		script(src='/jquery/mask.min.js')
+		script.
+			$(document).ready(function(){
+				$('.money').mask("#.##0,00", {reverse: true});
+			});

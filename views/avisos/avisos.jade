@@ -1,0 +1,122 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias
+			.faixa
+				h1 Avisos
+			- var usuario = user.tipoConta
+			if (usuario == 'administrador')
+				.container
+					.row
+						a(href='/avisos/cadastrar')
+							button.btn.btn-gran.pull-right.btn-primary
+								p Cadastrar
+				.container
+					each lista, i in listaAvisos
+						.bloco.col-md-4.blocoAvisos
+							.data
+								p #{moment(lista.data).format('DD')}
+								p #{moment(lista.data).format('MMM')}
+							.conteudo.conteudoNoticias
+								a(href='/aviso/#{lista._id}')
+									.titulo
+										h2 #{lista.titulo}
+									.texto
+										p #{lista.descricao}
+							a(href='/avisos/editar/#{lista._id}')
+								button.btn Editar
+							a#deletar(data-toggle='modal', data-target='##{lista._id}')
+								button.btn.glyphicon.glyphicon-trash
+
+						.modal.fade(role='dialog', id='#{lista._id}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Tem certeza que deseja excluir "#{lista.titulo}"?
+									.modal-body
+										.form-group.pull-right
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											a.btn.btn-danger.confirmaModal(href='/avisos/deletar/#{lista._id}') Excluir
+									br
+									br
+			else 
+				.container
+					each lista, i in listaAvisos 
+						.bloco.col-md-4
+							.data
+								p #{moment(lista.data).format('DD')}
+								p #{moment(lista.data).format('MMM')}
+							.conteudo
+								.titulo
+									h2 #{lista.titulo}
+								.texto
+									p #{lista.descricao}
+							a(href='/aviso/#{lista._id}')
+								button.btn Veja
+		.row.deuRuimColor
+			.container
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+				script(src='/node_modules/moment/moment.min.js')
+				script.
+					moment.locale('en', {
+					    months : [
+					        "January", "February", "Abril", "April", "May", "June", "July",
+					        "August", "September", "October", "November", "December"
+					    ]
+					});
+
+		//- section.divNoticias
+		//- 	.container
+		//- 		// Responsive calendar - START
+		//- 		.responsive-calendar
+		//- 			.controls
+		//- 				.btn-group.controlador(role='group')
+		//- 					a(data-go='prev')
+		//- 						button.btn.setaEsquerda.btn-secondary(type='button')
+		//- 							i.fa.fa-arrow-left
+		//- 					button.btn.meio.btn-secondary(type='button')
+		//- 						span(data-head-year='')
+		//- 						span(data-head-month='')
+		//- 					a(data-go='next')
+		//- 						button.btn.setaDireita.btn-secondary(type='button')
+		//- 							i.fa.fa-arrow-right
+		//- 				hr
+		//- 				.day-headers
+		//- 					.day.header Segunda
+		//- 					.day.header Terça
+		//- 					.day.header Quarta
+		//- 					.day.header Quinta
+		//- 					.day.header Sexta
+		//- 					.day.header Sábado
+		//- 					.day.header Domingo
+		//- 				.days(data-group='days')
+	
+		//- #teste.modal.fade(role='dialog')
+		//- 	.modal-dialog.modal-md
+		//- 		// Modal content
+		//- 		.modal-content
+		//- 			.modal-header
+		//- 				button.close(type='button', data-dismiss='modal') ×
+		//- 				h4.modal-title Tem certeza que deseja excluir o ""?
+		//- 			.modal-body
+		//- 				.form-group.pull-right
+		//- 					button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+		//- 					a.btn.btn-danger.confirmaModal(href='#') Excluir
+		//- 				br
+		//- 				br
+			
+			
+		//- 	script(type='text/javascript').
+		//- 		$(document).ready(function () {
+		//- 			$(".responsive-calendar").responsiveCalendar({
+		//- 				events: {
+		//- 					"2016-04-30": {"number": 3, "badgeClass": "badge-warning", "url": "http://w3widgets.com/responsive-calendar"},
+		//- 				}
+		//- 			});
+		//- 		});
+		//- 	script(src='/js/responsive-calendar.min.js')

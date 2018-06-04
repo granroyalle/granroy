@@ -1,0 +1,94 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias
+			.faixa
+				h1 #{valor.tituloDocumento}
+			- var usuario = user.tipoConta
+			if (usuario == 'administrador')
+				.container
+					.row
+						a(data-toggle='modal', data-target='#novoDocumento')
+							button.btn.btn-gran.pull-right.btn-primary
+								p Novo PDF
+
+					.modal.fade(role='dialog', id='novoDocumento')
+						.modal-dialog.modal-md
+							// Modal content
+							.modal-content
+								.modal-header
+									button.close(type='button', data-dismiss='modal') ×
+									h4.modal-title Novo PDF
+								.modal-body.row									
+									form.form-group(action='/documentos/fileArquivo', method='post', enctype='multipart/form-data')
+										input(type='hidden' name='fkDocumentos' value='#{valor._id}')
+										label.col-md-12.control-label(for='inputNome') Nome PDF
+										.col-md-12
+											input#inputNome.form-control(type='text', name='tituloDocumento')
+										label.col-md-12.control-label Arquivo PDF
+										.col-md-10.col-xs-4
+											input.form-control(type='file', name='arquivo')
+
+										button.btn.btn-primary.confirmaModal.pull-right.cadastrarNome(type='submit') Cadastrar
+										button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+				.container
+					each lista, i in listaDocumento
+						.col-md-4.col-sm-6
+							a.pdfAtas(href='/file/#{lista.arquivo}' target='_blank')
+								img(src='/img/home/pdf-icon.png')
+								- var titulo = string(lista.titulo).left(40).toString();
+								if (titulo.length >= 40) 
+									p #{titulo}...
+								else 
+									p #{titulo}
+							.faixa-gran
+								a.col-sm-6.col-xs-12.faixa-granBlue(data-toggle='modal', data-target='#renomear#{lista._id}' href='#')
+									p Renomear
+								.modal.fade(role='dialog', id='renomear#{lista._id}')
+									.modal-dialog.modal-md
+										// Modal content
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title Renomear Documento
+											.modal-body.row									
+												form.form-group(action='/documentos/renomearAtas/#{lista._id}', method='post')
+													label.col-md-12.control-label(for='inputNome') nome Documento
+													.col-md-12
+														input#inputNome.form-control(type='text', name='titulo', value='#{lista.titulo}')
+
+													button.btn.btn-primary.confirmaModal.pull-right.cadastrarNome Renomear
+													button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+								a.col-sm-6.col-xs-12.faixa-granRed(data-toggle='modal', data-target='#excluir#{lista._id}')
+									i.fa.fa-trash-o.fa-2x
+							.modal.fade(role='dialog', id='excluir#{lista._id}')
+								.modal-dialog.modal-md
+									// Modal content
+									.modal-content
+										.modal-header
+											button.close(type='button', data-dismiss='modal') ×
+											h4.modal-title Excluir Documento
+										.modal-body.row									
+											form.form-group(action='/documentos/excluirAtas/#{lista._id}', method='post')
+												label.col-md-12.control-label(for='inputNome') Deseja exlcuir o documento "#{lista.titulo}" ?
+
+												button.btn.btn-danger.confirmaModal.pull-right.cadastrarNome Excluir
+												button.btn.btn-default.cancelarModal.pull-right.cadastrarNome(type='button', data-dismiss='modal') Cancelar
+
+			else 
+				.container
+					each lista, i in listaDocumento
+						.col-md-4.col-sm-6.pdfAtasResp
+							a.pdfAtas(href='/arquivoPdf/#{lista.arquivo}' target='_blank')
+								img(src='/img/home/pdf-icon.png')
+								- var titulo = string(lista.titulo).left(40).toString();
+								if (titulo.length >= 40) 
+									p #{titulo}...
+								else 
+									p #{titulo}
+		.row.deuRuimColor
+			.container
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar

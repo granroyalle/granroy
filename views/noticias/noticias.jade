@@ -1,0 +1,80 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row
+		section.divNoticias
+			.faixa
+				h1 Notícias
+			- var usuario = user.tipoConta
+			if (usuario == 'administrador')
+				.container
+					.row
+						a(href='/noticia/cadastrar')
+							button.btn.btn-gran.pull-right.btn-primary
+								p Cadastrar
+				.container
+					each lista, i in listaNoticia 
+						.bloco.col-md-4.col-sm-6
+							.data
+								p #{moment(lista.data).format('DD')}
+								p #{moment(lista.data).format('MMM')}
+							.conteudo.conteudoNoticias
+								a(href='/noticia/#{lista._id}')
+									.titulo
+										h2 #{lista.titulo}
+									.texto
+										- var descricao = string(lista.descricao).left(280).toString();
+										if (descricao.length > 279) 
+											p #{descricao}...
+										else 
+											p #{descricao}
+
+							a(href='/noticia/editar/#{lista._id}')
+								button.btn Editar
+							a#deletar(data-toggle='modal', data-target='##{lista._id}')
+								button.btn.glyphicon.glyphicon-trash
+
+						.modal.fade(role='dialog', id='#{lista._id}')
+							.modal-dialog.modal-md
+								// Modal content
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal') ×
+										h4.modal-title Tem certeza que deseja excluir "#{lista.titulo}"?
+									.modal-body
+										.form-group.pull-right
+											button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+											a.btn.btn-danger.confirmaModal(href='/noticias/deletar/#{lista._id}') Excluir
+									br
+									br
+			else 
+				.container
+					each lista, i in listaNoticia 
+						.bloco.col-md-4
+							.data
+								p #{moment(lista.data).format('DD')}
+								p #{moment(lista.data).format('MMM')}
+							.conteudo
+								.titulo
+									h2 #{lista.titulo}
+								.texto
+									- var descricao = string(lista.descricao).left(280).toString();
+									if (descricao.length > 279) 
+										p #{descricao}...
+									else 
+										p #{descricao}
+							a(href='/noticia/#{lista._id}')
+								button.btn Veja
+			.container
+				.row
+					a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+				script(src='/node_modules/moment/moment.min.js')
+				script.
+					moment.locale('en', {
+					    months : [
+					        "January", "February", "Abril", "April", "May", "June", "July",
+					        "August", "September", "October", "November", "December"
+					    ]
+					});

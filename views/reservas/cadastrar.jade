@@ -1,0 +1,63 @@
+extends ../layout
+
+block content
+	.row
+		.fotoTopo
+	.row
+		.container.well
+			form.form-horizontal(method='post' action="/avisos/cadastrarCad", entype='multipart/form-data')
+				legend.text-center Cadastrar Avisos
+				.row.goBack
+					a.btn.btn-sm.btn-gran.btn-primary.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Modalidade
+					.col-md-4
+						legent(id='Piscina') Piscina
+							input#inputModalidade(type='radio', name='modalidade', value='Piscina' required)
+						legent(id='Piscina') Salão de Festa
+							input#inputModalidade(type='radio', name='modalidade', value='SalaoFesta' required)
+						legent(id='Piscina') Society
+							input#inputModalidade(type='radio', name='modalidade', value='Society' required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Data
+					.col-md-3
+						input#inputData.form-control(type='date', name='data', required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Hora Inicio
+					.col-md-3
+						input#inputHora.form-control(type='time', name='horario', required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Hora Termino
+					.col-md-3
+						input#inputHora.form-control(type='time', name='horario', required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputTitulo') Título
+					.col-md-10
+						input#inputTitulo.form-control(type='text', name='titulo')
+
+				.form-group
+					label.col-md-2.control-label(for='inputUrlAmigavel') Url Amigavel
+					.col-md-10
+						input#inputUrlAmigavel.form-control(type='text', name='urlAmigavel', placeholder='Não utilize caracteres especiais Ex: (,)(´)(;)(^)')
+
+				.form-group
+					label.col-md-2.control-label(for='textArea') Descrição
+					.col-md-10
+						textarea#textarea.form-control(rows='5', name='descricao')
+
+				button.btn.btn-gran.btn-primary.pull-right Cadastrar
+	.container
+		.row
+			a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+				i.fa.fa-reply &nbsp Voltar
+
+	script.
+		function goBack() {
+			window.history.back();
+		}

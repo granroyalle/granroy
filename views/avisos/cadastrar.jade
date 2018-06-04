@@ -1,0 +1,47 @@
+extends ../layout
+
+block content
+	.row
+		.fotoTopo
+	.row
+		.container.well
+			form.form-horizontal(method='post' action="/avisos/cadastrarCad", entype='multipart/form-data')
+				//- form.form-horizontal(method='post' action="/avisos/testeEmail")
+				each lista, i in listaEmails 
+					input(name="emails" value="#{lista.email}" type='hidden')
+				legend.text-center Cadastrar Avisos
+				.row.goBack
+					a.btn.btn-sm.btn-gran.btn-primary.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+
+				//- .form-group
+				//- 	label.col-md-2.control-label(for='inputData') Data
+				//- 	.col-md-3
+				//- 		input#inputData.form-control(type='text', name='emails', value='#{listaEmails}'  required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputData') Data
+					.col-md-3
+						input#inputData.form-control(type='date', name='data', required)
+
+				.form-group
+					label.col-md-2.control-label(for='inputTitulo') Título
+					.col-md-10
+						input#inputTitulo.form-control(type='text', name='titulo')
+
+				//- .form-group
+				//- 	label.col-md-2.control-label(for='inputUrlAmigavel') Url Amigavel
+				//- 	.col-md-10
+				//- 		input#inputUrlAmigavel.form-control(type='text', name='urlAmigavel', placeholder='Não utilize caracteres especiais Ex: (,)(´)(;)(^)')
+
+				.form-group
+					label.col-md-2.control-label(for='textArea') Descrição
+					.col-md-10
+						textarea#textarea.form-control(rows='5', name='descricao')
+
+				button.btn.btn-gran.btn-primary.pull-right Cadastrar
+
+	script.
+		function goBack() {
+			window.history.back();
+		}

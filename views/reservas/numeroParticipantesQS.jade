@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+	main.noticias
+		section.fotoTopo.row				
+		div
+			div.row
+				div.col-sm-6.col-md-4.col-md-offset-4.divCadastrar
+					h1.text-center.login-title Número de Participantes
+					br
+					div.signup-wall.numeroParticipante
+						- var link = url;
+						- var url2 = link.split('/');
+						form(class='form-signin formCadastrarListando', action='/reservas/registrarNumeroParticipantes/#{url2[3]}', method='POST')
+							label(class='labelFormCadastrar') Nome
+							p.nomePaiDependente #{user.nome}
+							input(type="hidden" value="#{user.nome}" name="nomeUserP")
+							input(type='hidden' value='#{user._id}' name='idUser')
+							label(class='labelFormCadastrar') Regras
+							input(type='hidden' value='#{url2[3]}' name='idmodalidadeReserva')
+							.regrasParticipante
+								p.nomePaiDependente Quadra Society limite de participantes: máximo de 10 pessoas.							
+							div.depedentes
+								//- label(class='labelFormCadastrar') Participantes
+								//- input(type='number', name='numeroParticipante', class='form-control telefone', id='numeroDedependente' placeholder='Número de Participantes', max='10' min='1' onchange='myFunction()' required)
+								//- br
+								//- br
+								//- br
+								a.add_button(href='javascript:void(0);', title='Add campos')
+									p Adcionar campos
+								br
+								.field_wrapper
+									div
+										input(type='text', name='nomeParticipante', class='form-control telefone', placeholder='Nome do Participante', required)
+										input(type='text', name='rgParticipante', class='form-control telefone', placeholder='RG do Participante', required)
+										a.add_button(href='javascript:void(0);', title='Add field')
+											img(src='/img/home/buttonMais.png')
+							br
+							button(class='btn btn-lg btn-primary btn-block', type='submit') Registrar
+							span.clearfix
+
+							script.
+								$(document).ready(function(){
+									var maxField = 10; //Input fields increment limitation
+									var addButton = $('.add_button'); //Add button selector
+									var wrapper = $('.field_wrapper'); //Input field wrapper
+									var fieldHTML = '<div><input type="text" name="nomeParticipante" class="form-control telefone" placeholder="Nome do Participante" /><input type="text" name="rgParticipante" class="form-control telefone" placeholder="RG do Participante"/><a href="javascript:void(0);" class="remove_button" title="Remove field"><img src="/img/home/buttonMenos.png" /></a></div>'; //New input field html 
+									var x = 1; //Initial field counter is 1
+									$(addButton).click(function(){ //Once add button is clicked
+										if(x < maxField){ //Check maximum number of input fields
+											x++; //Increment field counter
+											$(wrapper).append(fieldHTML); // Add field html
+										}
+									});
+									$(wrapper).on('click', '.remove_button', function(e){ //Once remove button is clicked
+										e.preventDefault();
+										$(this).parent('div').remove(); //Remove field html
+										x--; //Decrement field counter
+									});
+								});
+
+		.container
+			.row
+				a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+					i.fa.fa-reply &nbsp Voltar
+
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')		
+		script(src='/jquery/mask.min.js')

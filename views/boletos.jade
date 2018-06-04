@@ -1,0 +1,166 @@
+extends layout
+
+block content
+	main.boletos
+		section.fotoTopo.row
+		.divBoletos
+			.faixa
+				h1 Boletos
+
+			.container
+				if (user.tipoConta == "administrador") 
+					h1 Em Breve
+					//- .row
+					//- 	a.btn.btn-gran.pull-right(data-toggle='modal', data-target='#modal') Cadastrar Mensalidades
+					//- 	form(action='/boletos/geradorBoleto', method='POST')
+					//- 		each lista, i in listaUsuarios
+					//- 			input(type='hidden' value='#{lista.email}' name='emails')
+					//- 			input(type='hidden', value='#{lista._id}', name='condomino')
+					//- 			input(type='hidden', value='#{lista.mensalidade}', name='mensalidade')
+					//- 			input(type='hidden', value='#{lista.dataVencimento}', name='vencimento')
+					//- 			input(type='hidden', value='1', name='gerado')
+					//- 		button.btn.btn-gran.pull-right(href='#') Gerar Boletos
+					//- br
+					//- .table-responsive.tabela
+					//- 	table#tabela.table.table-striped.table-bordered(cellspacing='0', width='100%')
+					//- 		thead
+					//- 			tr
+					//- 				th(aria-label='ID: activate to sort column ascending') Nome
+					//- 				th E-mail
+					//- 				th Número Casa
+					//- 				th Impresso
+					//- 				th Alterar
+					//- 		tbody
+					//- 			each lista, i in listaUsuarios
+					//- 				if (lista.tipoConta != "administrador")
+					//- 					tr
+					//- 						td #{lista.nome}
+					//- 						td #{lista.email}
+					//- 						td #{lista.numeroCasa}
+					//- 						if (moment(dataAtual).format('MM') > moment(lista.dataMesAtual).format('MM'))
+					//- 							td 
+					//- 						else
+					//- 							td #{lista.impresso}
+					//- 						td 
+					//- 							a(href='/usuario/mensalidadeIndividual/#{lista._id}') Mensalidade
+					//- 
+					//- 
+					//- #modal.modal.fade(role='dialog')
+					//- 	.modal-dialog.modal-md
+					//- 		// Modal content
+					//- 		.modal-content
+					//- 			.modal-header
+					//- 				button.close(type='button', data-dismiss='modal') ×
+					//- 				h4.modal-title Cadastrar Mensalidade
+					//- 			.modal-body
+					//- 				form(action='/usuario/editarMensalidade', method='POST')
+					//- 					.form-group
+					//- 						label.control-label.valorMensalidade(for='inputMensalidade') Valor da mensalidade
+					//- 							span.rsBoleto R$
+					//- 							input(type='text', name='valor2', class='form-control valor', onkeypress='return SomenteNumero(event)' maxlength='2' value='00' required)
+					//- 							p.virgula ,
+					//- 							input#precoMensalidade(type='text', name='valor1', class='form-control valor', onkeypress='return SomenteNumero(event)' maxlength='8' placeholder='1000' required)
+					//- 						br
+					//- 						label.control-label(for='inputDataVencimento') Data vencimento
+					//- 						input(type='date', name='dataVencimento', class='form-control', required)
+					//- 						hr
+					//- 						button.btn.btn-primary.confirmaModal(type='submit') Cadastrar
+					//- 						button.btn.btn-default.cancelarModal(type='button', data-dismiss='modal') Cancelar
+				else
+					.row
+						.tabela
+							.linha.primeiraLinha
+								h1 Em Breve
+							//- 	.coluna.col-xs-3
+							//- 		.celula
+							//- 			p Ano / Mês
+							//- 	.coluna.col-xs-3
+							//- 		.celula
+							//- 			p Vencimento
+							//- 	.coluna.col-xs-3
+							//- 		.celula
+							//- 			p Valor
+							//- each boletos, i in boleto
+							//- 	if (user._id == boletos.condomino)
+							//- 		.linha
+							//- 			.coluna.col-xs-3
+							//- 				.celula
+							//- 					p #{moment(boletos.dataAtual).format('YY/MM')}
+							//- 			.coluna.col-xs-3
+							//- 				.celula
+							//- 					p #{moment(boletos.vencimento).format('DD/MM')}
+							//- 																	
+							//- 			.coluna.col-xs-3
+							//- 				.celula
+							//- 					span.rs R$
+							//- 					p.money#money #{boletos.mensalidade}
+							//- 			- var diaAtual = moment(dataAtual).format('DD');
+							//- 			- var diaVencimento = moment(boletos.vencimento).format('DD');
+							//- 			- var mesAtual = moment(dataAtual).format('MM');
+							//- 			- var mesVencimento = moment(boletos.vencimento).format('MM');
+							//- 			if (mesAtual+diaAtual > mesVencimento+diaVencimento)
+							//- 				a(href='#')
+							//- 					.coluna.col-xs-3
+							//- 						.celula.celulaVerde
+							//- 							//- if (new Date == boleto.dataAtual)
+							//- 							//- 	a(href='#', style='color: #fff;' class='btn-block' data-toggle='modal', data-target="#modal")
+							//- 							//- 		p IMPRIMIR
+							//- 							//- else
+							//- 							a(href='', data-toggle='modal', data-target='#msgVencida', style='color: #fff;') 
+							//- 								p Vencido
+							//- 			else
+							//- 				.coluna.col-xs-3
+							//- 					.celula.celulaVerde
+							//- 						//- if (new Date == boleto.dataAtual)
+							//- 						//- 	a(href='#', style='color: #fff;' class='btn-block' data-toggle='modal', data-target="#modal")
+							//- 						//- 		p IMPRIMIR
+							//- 						//- else
+							//- 						form(action='/boletos/usuarioImprimiu/#{user._id}', method='POST', target="_blank")
+							//- 							input(type="hidden" name='impresso' value="Sim")
+							//- 							button(style='color: #fff; width: 100%; background: transparent; border: transparent', type='submit') Imprimir
+							//- 
+							//- 
+							//- 		#msgVencida.modal.fade(role='dialog')
+							//- 			.modal-dialog.modal-md
+							//- 				// Modal content
+							//- 				.modal-content
+							//- 					.modal-header
+							//- 						button.close(type='button', data-dismiss='modal') ×
+							//- 						h4.modal-title Este boleto venceu!
+							//- 					.modal-body
+							//- 						p Favor entrar em contato com a administração
+							//- 						.form-group
+							//- 							button.btn.btn-default.cancelarModal.pull-right(type='button', data-dismiss='modal') sair
+							//- 						br
+			.container
+				.row
+					a.btn.btn-sm.btn-gran.voltar.pull-right(href="#", onclick='goBack()') 
+						i.fa.fa-reply &nbsp Voltar
+					//- else 
+					//- 	.linha.primeiraLinha
+					//- 		.coluna.col-xs-3.col-md-offset-3
+					//- 			.celula
+					//- 				p Ano / Mês
+					//- 	.linha
+					//- 		.coluna.col-xs-3.col-md-offset-3
+					//- 			.celula
+					//- 				p 2015 / Dezembro
+					//- 		a(href='#')
+					//- 			.coluna.col-xs-3
+					//- 				.celula.celulaVerde
+					//- 					p GERAR
+				//- Fim tabela
+
+		script(src='/jquery/mask.min.js')
+		script.
+			$(document).ready(function(){
+				$('.money').mask('00000000000000000', {reverse: true});
+			});
+			function SomenteNumero(e){
+			    var tecla=(window.event)?event.keyCode:e.which;   
+			    if((tecla>47 && tecla<58)) return true;
+			    else{
+			    	if (tecla==8 || tecla==0) return true;
+				else  return false;
+			    }
+			}
