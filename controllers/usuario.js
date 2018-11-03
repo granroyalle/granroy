@@ -357,7 +357,7 @@ module.exports = function(app) {
 			  from: 'Gran Roaylle <granroyallepousoalegre@gmail.com>',
 			  to: emailUsuarioEnvia,
 			  subject: 'Alterar Senha',
-			  text: 'Solicitou alteração de senha? Segue o link para realizar: http://www.granroyallepousoalegre.com.br/recuperaSenhaIndex/'+emailUsuario+''
+			  text: 'Solicitou alteração de senha? Segue o link para realizar: http://www.granroyallepousoalegre.com/recuperaSenhaIndex/'+emailUsuario+''
 			};
 			
 			mailgun.messages().send(data, function (error, body) {
