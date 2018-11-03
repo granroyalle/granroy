@@ -81,7 +81,7 @@ block content
 				.container
 					each lista, i in listaDocumento
 						.col-md-4.col-sm-6.pdfAtasResp
-							a.pdfAtas(href='/arquivoPdf/#{lista.arquivo}' target='_blank')
+							a.pdfAtas(href='/file/#{lista.arquivo}' target='_blank')
 								img(src='/img/home/pdf-icon.png')
 								- var titulo = string(lista.titulo).left(40).toString();
 								if (titulo.length >= 40) 
